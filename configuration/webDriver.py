@@ -2,20 +2,19 @@ from appium import webdriver
 from selenium.webdriver.common.by import By
 from appium.options.android import UiAutomator2Options
 
-capabilities = {
-  "platformName": "Android",
-  "appium:automationName": "uiautomator2",
-  "appium:deviceName": "R3CX306FV2J",
-  "appium:appPackage": "com.appiumpro.the_app",
-  "appium:appActivity": "com.appiumpro.the_app.MainActivity",
-  "appium:autoGrantPermissions": "true", #권한 전체 자동 허용
-  "appium:noreset": "true" #App data no reset
-  # "autoWebview": "true" #자동 웹뷰 열기
-}
+options = UiAutomator2Options()
+options.platform_name = "Android"
+options.automation_name = "uiautomator2"
+options.device_name = "R3CX306FV2J"
+options.app_package = "com.appiumpro.the_app"
+options.app_activity = "com.appiumpro.the_app.MainActivity"
+options.auto_grant_permissions = True
+options.no_reset = True
+# options.auto_webview = True  # 필요 시 활성화
 
 appium_server_url = 'http://localhost:4723'
 
-wd = webdriver.Remote(appium_server_url, options=UiAutomator2Options().load_capabilities(capabilities))
+wd = webdriver.Remote('http://localhost:4723', options=options)
 
 def cal():
   wd.implicitly_wait(5)
