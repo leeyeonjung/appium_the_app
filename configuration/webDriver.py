@@ -1,6 +1,9 @@
 from appium import webdriver
 from selenium.webdriver.common.by import By
 from appium.options.android import UiAutomator2Options
+import logging
+
+log = logging.getLogger()
 
 options = UiAutomator2Options()
 options.platform_name = "Android"
@@ -16,7 +19,7 @@ appium_server_url = 'http://localhost:4723'
 
 wd = webdriver.Remote('http://localhost:4723', options=options)
 
-def cal():
+def call():
   wd.implicitly_wait(5)
   return wd
 
