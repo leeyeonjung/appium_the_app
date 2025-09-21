@@ -1,34 +1,34 @@
 from appium import webdriver
 from selenium.webdriver.common.by import By
+import pytest
 from appium.options.android import UiAutomator2Options
 import logging
 
 log = logging.getLogger()
 
-options = UiAutomator2Options()
-options.platform_name = "Android"
-options.automation_name = "uiautomator2"
-options.device_name = "R3CX306FV2J"
-options.app_package = "com.appiumpro.the_app"
-options.app_activity = "com.appiumpro.the_app.MainActivity"
-options.auto_grant_permissions = True
-options.no_reset = True
-# options.auto_webview = True  # 필요 시 활성화
-
 appium_server_url = 'http://localhost:4723'
 
-wd = webdriver.Remote('http://localhost:4723', options=options)
+def create_driver():
+    options = UiAutomator2Options()
+    options.platform_name = "Android"
+    options.device_name = "emulator-5554"
+    options.app_package = "com.appiumpro.the_app"
+    options.app_activity = "com.appiumpro.the_app.MainActivity"
+    options.auto_grant_permissions = True
 
-def call():
-  wd.implicitly_wait(5)
-  return wd
+    driver = webdriver.Remote(appium_server_url, options=options)
+    driver.implicitly_wait(5)
+    return driver
 
-def xpath(data):
-  return wd.find_element(By.XPATH, data)
+# 헬퍼 함수들은 driver를 인자로 받도록 바꾸기
+def xpath(driver, data):
+    return driver.find_element(By.XPATH, data)
 
-def id(data):
-  return wd.find_element(By.ID, data)
+def xpaths(driver, data):
+    return driver.find_elements(By.XPATH, data)
 
+def id(driver, data):
+    return driver.find_elements(By.ID, data)
     
 #webDriver.wd.close_app() / 앱 종료
 #webDriver.wd.launch_app() / 앱 백그라운드에서 재시작
