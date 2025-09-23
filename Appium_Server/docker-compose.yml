@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  appium:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: appium-server
+    ports:
+      - "4723:4723"
+    restart: unless-stopped
+    command: >
+      appium
+      --allow-insecure uiautomator2:chromedriver_autodownload
+      --log-timestamp
+      --relaxed-security
