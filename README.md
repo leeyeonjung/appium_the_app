@@ -22,7 +22,8 @@
 ## Running Tests
 - 이 프로젝트는 pytest 기반의 테스트를 사용합니다.
 가장 상위 경로의 run_tests.py 스크립트를 실행하면 전체 테스트가 실행되며,
-결과는 동일 경로에 HTML 리포트(report_YYYY-MM-DD_HH-MM-SS.html) 로 자동 생성됩니다.
+결과는 tests 하위에 📊test-reports📊 폴더에 HTML 리포트(report_YYYY-MM-DD_HH-MM-SS.html) 로 자동 생성됩니다.
+(폴더가 없다면 자동 생성 됩니다.)
 - 전체 테스트 케이스 실행 명령어
   - python run_tests.py
 - 특정 파일만 실행

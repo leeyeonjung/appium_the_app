@@ -1,10 +1,16 @@
 import pytest_check as check
-import pytest
 import logging
-import configuration.webDriver as webDriver
+from tests.configuration import webDriver as webdriver
 
 log = logging.getLogger()
 
 def test_setup():
-    result=webDriver.call()
-    check.equal("appium.webdriver.webdriver.WebDriver" in str(result), True)
+
+    # App Session 실행
+    wd = webdriver.create_driver()
+
+    # Result : 실행 session 안에 "appium.webdriver.webdriver.WebDriver" 존재
+    check.equal("appium.webdriver.webdriver.WebDriver" in str(wd), True)
+
+    # App Session 종료
+    wd.quit()

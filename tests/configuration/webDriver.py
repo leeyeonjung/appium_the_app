@@ -1,6 +1,5 @@
 from appium import webdriver
 from selenium.webdriver.common.by import By
-import pytest
 from appium.options.android import UiAutomator2Options
 import logging
 

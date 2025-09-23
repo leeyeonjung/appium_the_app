@@ -3,20 +3,24 @@ import logging
 import os
 from io import BytesIO
 from time import sleep
+from pathlib import Path
 
-# 서드파티 라이브러리
+# 외부 라이브러리
 import pytest_check as check
 from PIL import Image
 
 # 내부 모듈
-import configuration.webDriver as webdriver
-import common_util.control_image as image
+from tests.configuration import webDriver as webdriver
+from tests.common_util import control_image as control_image
 
 log = logging.getLogger()
 
+BASE_DIR = Path(__file__).resolve().parent.parent  # tests/
+IMAGE_DIR = BASE_DIR / "image"
+
 def test_image_01():
 
-    # App 실행
+    # App Session 실행
     wd = webdriver.create_driver() 
 
     #Photo Demo 화면 진입
@@ -24,12 +28,12 @@ def test_image_01():
     sleep(0.5)
 
     expected = {
-        "C:/appium_the_app/image/original_1.jpg",
-        "C:/appium_the_app/image/original_2.jpg",
-        "C:/appium_the_app/image/original_3.jpg",
-        "C:/appium_the_app/image/original_4.jpg",
-        "C:/appium_the_app/image/original_5.jpg",
-        "C:/appium_the_app/image/original_6.jpg",
+        str(IMAGE_DIR / "original_1.jpg"),
+        str(IMAGE_DIR / "original_2.jpg"),
+        str(IMAGE_DIR / "original_3.jpg"),
+        str(IMAGE_DIR / "original_4.jpg"),
+        str(IMAGE_DIR / "original_5.jpg"),
+        str(IMAGE_DIR / "original_6.jpg"),
     }
 
     # ScrollView 안의 모든 ImageView 가져오기
@@ -47,8 +51,8 @@ def test_image_01():
             if idx in used_elements:
                 continue
 
-            screenshot = Image.open(BytesIO(el.screenshot_as_png)).convert("RGB")
-            score = image.compare(screenshot, ref)
+            screenshot = control_image.open(BytesIO(el.screenshot_as_png)).convert("RGB")
+            score = control_image.compare(screenshot, ref)
 
             # 매번 점수 로그 찍기
             log.info(f"[Compare] {ref} vs element {idx} → {score:.2f}")
@@ -69,26 +73,27 @@ def test_image_01():
     log.info(f"Found: {found}")
     check.equal(found, expected, f"Not all images matched correctly. Found: {found}")
 
+    # App Session 종료
     wd.quit()
 
 
 def test_image_text_01():
 
-    # App 실행
+    # App Session 실행
     wd = webdriver.create_driver() 
 
     #Photo Demo 화면 진입
     webdriver.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
     sleep(0.5)
 
-    expected = [
-        "C:/appium_the_app/image/original_1.jpg",
-        "C:/appium_the_app/image/original_2.jpg",
-        "C:/appium_the_app/image/original_3.jpg",
-        "C:/appium_the_app/image/original_4.jpg",
-        "C:/appium_the_app/image/original_5.jpg",
-        "C:/appium_the_app/image/original_6.jpg",
-    ]
+    expected = {
+        str(IMAGE_DIR / "original_1.jpg"),
+        str(IMAGE_DIR / "original_2.jpg"),
+        str(IMAGE_DIR / "original_3.jpg"),
+        str(IMAGE_DIR / "original_4.jpg"),
+        str(IMAGE_DIR / "original_5.jpg"),
+        str(IMAGE_DIR / "original_6.jpg"),
+    }
 
     # ScrollView 안의 모든 ImageView 가져오기
     elements = webdriver.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
@@ -118,8 +123,8 @@ def test_image_text_01():
             if idx in used_elements:
                 continue
 
-            screenshot = Image.open(BytesIO(el.screenshot_as_png)).convert("RGB")
-            score = image.compare(screenshot, ref)
+            screenshot = control_image.open(BytesIO(el.screenshot_as_png)).convert("RGB")
+            score = control_image.compare(screenshot, ref)
 
             log.info(f"[Compare] {ref} vs element {idx} → {score:.2f}")
 
@@ -156,7 +161,7 @@ def test_image_text_01():
         else:
             log.warning(f"[FAIL] {ref} best match was element {best_el} (score {best_score:.2f})")
 
-
+    # App Session 종료
     wd.quit()
 
 # def test_image_01():

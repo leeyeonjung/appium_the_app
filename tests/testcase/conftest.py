@@ -1,6 +1,6 @@
 # conftest.py
 import pytest
-import configuration.webDriver as webdriver
+from tests.configuration import webDriver as webdriver
 
 @pytest.fixture
 def wd():

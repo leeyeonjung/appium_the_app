@@ -1,4 +1,4 @@
-# 서드파티
+# 외부 library
 import numpy as np
 from PIL import Image
 from skimage.metrics import structural_similarity as ssim
@@ -35,3 +35,5 @@ def compare(img1, img2):
     score, _ = ssim(arr1, arr2, channel_axis=-1, full=True)
 
     return round(score * 100, 2)  # 0~100 점수
+
+open = Image.open
