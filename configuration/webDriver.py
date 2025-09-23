@@ -6,6 +6,7 @@ import logging
 
 log = logging.getLogger()
 
+# Appium Server URL
 appium_server_url = 'http://localhost:4723'
 
 def create_driver():
