@@ -35,3 +35,6 @@ def id(driver, data):
 #webDriver.wd.launch_app() / 앱 백그라운드에서 재시작
 #webDriver.wd.reset() 
 # ['NATIVE_APP', 'WEBVIEW_kr.co.nicevan.bujaapp']
+
+# WEBVIEW name
+# : WEBVIEW_com.appiumpro.the_app

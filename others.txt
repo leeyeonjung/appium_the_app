@@ -1,8 +1,0 @@
-WEBVIEW name
-: WEBVIEW_com.appiumpro.the_app
-
-appium 실행시 chromedriver auto download
-: appium --allow-insecure *:chromedriver_autodownload
-
-appium 실행 시 uiautomator2에 대한 chromedriver auto download
-: appium --allow-insecure uiautomator2:chromedriver_autodownload
