@@ -1,5 +1,6 @@
 from appium import webdriver
 from selenium.webdriver.common.by import By
+from appium.webdriver.common.appiumby import AppiumBy
 from appium.options.android import UiAutomator2Options
 import logging
 
@@ -20,7 +21,7 @@ def create_driver():
     driver.implicitly_wait(5)
     return driver
 
-# 헬퍼 함수들은 driver를 인자로 받도록 바꾸기
+# element 선택 함수는 driver와 각 값을 인자로 받아서 사용
 def xpath(driver, data):
     return driver.find_element(By.XPATH, data)
 
@@ -28,12 +29,7 @@ def xpaths(driver, data):
     return driver.find_elements(By.XPATH, data)
 
 def id(driver, data):
-    return driver.find_elements(By.ID, data)
-    
-#webDriver.wd.close_app() / 앱 종료
-#webDriver.wd.launch_app() / 앱 백그라운드에서 재시작
-#webDriver.wd.reset() 
-# ['NATIVE_APP', 'WEBVIEW_kr.co.nicevan.bujaapp']
+    return driver.find_element(AppiumBy.ID, data)
 
-# WEBVIEW name
-# : WEBVIEW_com.appiumpro.the_app
+def acc_id(driver, data):
+    return driver.find_element(AppiumBy.ACCESSIBILITY_ID, data)

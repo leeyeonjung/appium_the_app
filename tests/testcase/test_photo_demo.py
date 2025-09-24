@@ -7,7 +7,6 @@ from pathlib import Path
 
 # 외부 라이브러리
 import pytest_check as check
-from PIL import Image
 
 # 내부 모듈
 from tests.configuration import webDriver as webdriver
@@ -163,7 +162,3 @@ def test_image_text_01():
 
     # App Session 종료
     wd.quit()
-
-# def test_image_01():
-# def test_image_01():
-# def test_image_01():
