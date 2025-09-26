@@ -1,4 +1,4 @@
-# 외부 library
+# Third-party libraries
 import numpy as np
 from PIL import Image
 from skimage.metrics import structural_similarity as ssim

@@ -9,8 +9,16 @@ services:
     ports:
       - "4723:4723"
     restart: unless-stopped
+    volumes:
+      - ./logs:/logs
     command: >
-      appium
-      --allow-insecure uiautomator2:chromedriver_autodownload
-      --log-timestamp
-      --relaxed-security
+      sh -c "
+        LOGDATE=$(date +\"%Y-%m-%d\") &&
+        adb kill-server &&
+        adb start-server &&
+        exec appium
+          --allow-insecure uiautomator2:chromedriver_autodownload
+          --log-timestamp
+          --relaxed-security
+          >> /logs/appium_${LOGDATE}.log 2>&1
+      "

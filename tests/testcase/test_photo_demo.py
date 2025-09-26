@@ -1,29 +1,26 @@
-# 표준 라이브러리
+# Standard library
 import logging
 import os
 from io import BytesIO
 from time import sleep
 from pathlib import Path
 
-# 외부 라이브러리
+# Third-party libraries
 import pytest_check as check
 
-# 내부 모듈
-from tests.configuration import webDriver as webdriver
+# Local modules
+from tests.common_util import find_elements as element
 from tests.common_util import control_image as control_image
 
 log = logging.getLogger()
 
-BASE_DIR = Path(__file__).resolve().parent.parent  # tests/
+BASE_DIR = Path(__file__).resolve().parents[1]  # tests/
 IMAGE_DIR = BASE_DIR / "image"
 
-def test_image_01():
-
-    # App Session 실행
-    wd = webdriver.create_driver() 
+def test_image_01(wd):
 
     #Photo Demo 화면 진입
-    webdriver.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
     sleep(0.5)
 
     expected = {
@@ -36,7 +33,7 @@ def test_image_01():
     }
 
     # ScrollView 안의 모든 ImageView 가져오기
-    elements = webdriver.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
+    elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
     log.info(elements)
 
     used_elements = set()
@@ -72,17 +69,11 @@ def test_image_01():
     log.info(f"Found: {found}")
     check.equal(found, expected, f"Not all images matched correctly. Found: {found}")
 
-    # App Session 종료
-    wd.quit()
 
-
-def test_image_text_01():
-
-    # App Session 실행
-    wd = webdriver.create_driver() 
+def test_image_text_01(wd):
 
     #Photo Demo 화면 진입
-    webdriver.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
     sleep(0.5)
 
     expected = {
@@ -95,7 +86,7 @@ def test_image_text_01():
     }
 
     # ScrollView 안의 모든 ImageView 가져오기
-    elements = webdriver.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
+    elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
     log.info(f"elements count = {len(elements)}")
 
     # Expected Text 
@@ -115,7 +106,7 @@ def test_image_text_01():
         best_el = None
 
         # 🚩 매 루프마다 fresh elements 다시 가져오기
-        elements = webdriver.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
+        elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
         log.info(f"elements count = {len(elements)}")
 
         for idx, el in enumerate(elements, start=1):
@@ -136,13 +127,13 @@ def test_image_text_01():
             log.info(f"[PASS] {ref} matched with element {best_el} (score {best_score:.2f})")
 
             # fresh elements 다시 조회 → stale 방지
-            elements = webdriver.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
+            elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
             target_el = elements[best_el - 1]
             target_el.click()
             log.info(f"Clicked element {best_el} for {ref}")
 
             # 결과 텍스트 확인
-            result_text_element = webdriver.xpath(
+            result_text_element = element.xpath(
                 wd, '//android.widget.TextView[@resource-id="android:id/message"]'
             )
             result_text = result_text_element.text.strip()
@@ -154,11 +145,8 @@ def test_image_text_01():
             log.info(f"[CHECK PASS] {ref_filename}: Got expected text '{result_text}'")
 
             # 🚩 OK 버튼 눌러서 다이얼로그 닫기
-            ok_button = webdriver.xpath(wd, '//android.widget.Button[@resource-id="android:id/button1"]')
+            ok_button = element.xpath(wd, '//android.widget.Button[@resource-id="android:id/button1"]')
             ok_button.click()
             log.info("Dialog closed with OK button")
         else:
             log.warning(f"[FAIL] {ref} best match was element {best_el} (score {best_score:.2f})")
-
-    # App Session 종료
-    wd.quit()

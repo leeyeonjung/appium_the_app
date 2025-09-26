@@ -9,3 +9,6 @@ __pycache__/
 
 # 모든 APK 무시
 *.apk
+
+# 로그 추적용 명령어 기록
+/write.txt
