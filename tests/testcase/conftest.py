@@ -31,11 +31,15 @@ def wd():
 
 @pytest.fixture(autouse=True)
 def record_video(request, wd):
-    # === 프로젝트 루트 기준 (tests 와 같은 depth) ===
-    BASE_DIR = Path(__file__).resolve().parents[2]
 
-    # === Result/🎥video-reports🎥 폴더 보장 ===
-    save_dir = BASE_DIR / "Result" / "🎥video-reports🎥"
+    # === 프로젝트 루트 기준 (tests 와 같은 depth) ===
+    BASE_DIR = Path(__file__).resolve().parents[1]
+
+    # 테스트 파일명 추출 (예: test_webview_demo.py)
+    file_name = Path(request.node.fspath).stem   # 확장자 제거한 파일명
+
+    # === Result/🎥video-reports🎥/{테스트 스크립트 파일명}/ 폴더 보장 ===
+    save_dir = BASE_DIR / "Result" / "🎥video-reports🎥" / file_name
     os.makedirs(save_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

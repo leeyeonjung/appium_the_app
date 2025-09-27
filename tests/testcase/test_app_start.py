@@ -11,7 +11,7 @@ log = logging.getLogger()
 
 def test_setup(wd):
 
-    # Result : 실행 session 안에 "appium.webdriver.webdriver.WebDriver" 존재
+    # Assertion : 실행 session 안에 "appium.webdriver.webdriver.WebDriver" 존재
     check.equal("appium.webdriver.webdriver.WebDriver" in str(wd), True)
 
 
@@ -27,9 +27,9 @@ def test_homescreen_01(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Echo Box"
+    # Assertion : Title이 "Echo Box"
     check.equal(elements[0].text, "Echo Box")
-    # Result : element의 description이 "Write something and save to local memory"
+    # Assertion : element의 description이 "Write something and save to local memory"
     check.equal(elements[1].text, "Write something and save to local memory")
 
 
@@ -45,9 +45,9 @@ def test_homescreen_02(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Login Screen"
+    # Assertion : Title이 "Login Screen"
     check.equal(elements[0].text, "Login Screen")
-    # Result : element의 description이 "A fake login screen for testing"
+    # Assertion : element의 description이 "A fake login screen for testing"
     check.equal(elements[1].text, "A fake login screen for testing")
 
 
@@ -63,9 +63,9 @@ def test_homescreen_03(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Clipboard Demo"
+    # Assertion : Title이 "Clipboard Demo"
     check.equal(elements[0].text, "Clipboard Demo")
-    # Result : element의 description이 "Mess around with the clipboard"
+    # Assertion : element의 description이 "Mess around with the clipboard"
     check.equal(elements[1].text, "Mess around with the clipboard")
 
 
@@ -81,9 +81,9 @@ def test_homescreen_04(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Webview Demo"
+    # Assertion : Title이 "Webview Demo"
     check.equal(elements[0].text, "Webview Demo")
-    # Result : element의 description이 "Explore the possibilities of hybrid apps"
+    # Assertion : element의 description이 "Explore the possibilities of hybrid apps"
     check.equal(elements[1].text, "Explore the possibilities of hybrid apps")
 
 
@@ -99,9 +99,9 @@ def test_homescreen_05(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Dual Webview Demo"
+    # Assertion : Title이 "Dual Webview Demo"
     check.equal(elements[0].text, "Dual Webview Demo")
-    # Result : element의 description이 "Automate apps with multiple webviews"
+    # Assertion : element의 description이 "Automate apps with multiple webviews"
     check.equal(elements[1].text, "Automate apps with multiple webviews")
 
 
@@ -117,9 +117,9 @@ def test_homescreen_06(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "List Demo"
+    # Assertion : Title이 "List Demo"
     check.equal(elements[0].text, "List Demo")
-    # Result : element의 description이 "Scroll through a list of stuff"
+    # Assertion : element의 description이 "Scroll through a list of stuff"
     check.equal(elements[1].text, "Scroll through a list of stuff")
 
 
@@ -135,9 +135,9 @@ def test_homescreen_07(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Photo Demo"
+    # Assertion : Title이 "Photo Demo"
     check.equal(elements[0].text, "Photo Demo")
-    # Result : element의 description이 "Some photos with no distinguishing IDs"
+    # Assertion : element의 description이 "Some photos with no distinguishing IDs"
     check.equal(elements[1].text, "Some photos with no distinguishing IDs")
 
 
@@ -153,9 +153,9 @@ def test_homescreen_08(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Geolocation Demo"
+    # Assertion : Title이 "Geolocation Demo"
     check.equal(elements[0].text, "Geolocation Demo")
-    # Result : element의 description이 "See your current location"
+    # Assertion : element의 description이 "See your current location"
     check.equal(elements[1].text, "See your current location")
 
 
@@ -171,9 +171,9 @@ def test_homescreen_09(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Picker Demo"
+    # Assertion : Title이 "Picker Demo"
     check.equal(elements[0].text, "Picker Demo")
-    # Result : element의 description이 "Use some picker wheels for fun and profit"
+    # Assertion : element의 description이 "Use some picker wheels for fun and profit"
     check.equal(elements[1].text, "Use some picker wheels for fun and profit")
 
 
@@ -189,7 +189,7 @@ def test_homescreen_10(wd):
     for idx, el in enumerate(elements, start=1):
         log.debug(f"Element {idx}: text={el.text}, resource-id={el.get_attribute('resource-id')}")
 
-    # Result : Title이 "Verify Phone Number"
+    # Assertion : Title이 "Verify Phone Number"
     check.equal(elements[0].text, "Verify Phone Number")
-    # Result : element의 description이 "A fake SMS auto-verification screen"
+    # Assertion : element의 description이 "A fake SMS auto-verification screen"
     check.equal(elements[1].text, "A fake SMS auto-verification screen")

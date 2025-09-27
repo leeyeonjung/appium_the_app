@@ -17,7 +17,7 @@ log = logging.getLogger()
 BASE_DIR = Path(__file__).resolve().parents[1]  # tests/
 IMAGE_DIR = BASE_DIR / "image"
 
-def test_image_01(wd):
+def test_image(wd):
 
     #Photo Demo 화면 진입
     element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
@@ -70,7 +70,7 @@ def test_image_01(wd):
     check.equal(found, expected, f"Not all images matched correctly. Found: {found}")
 
 
-def test_image_text_01(wd):
+def test_image_text(wd):
 
     #Photo Demo 화면 진입
     element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
