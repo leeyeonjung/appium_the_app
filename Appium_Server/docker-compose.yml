@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: my-appium:3.0.2   # 빌드 시 이미지 이름/태그 지정
     container_name: appium-server
     ports:
       - "4723:4723"
