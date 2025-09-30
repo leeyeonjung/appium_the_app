@@ -2,7 +2,6 @@
 
 ## Overview
 이 프로젝트는 **Appium, Python, Pytest**를 이용하여 Appium에서 공식적으로 배포하는 샘플 앱 **The App**의 일부 기능을 자동화 테스트한 것입니다.  
-Appium 서버는 Docker image로 관리하여 프레임워크 및 버전 종속성을 최소화하였습니다.  
 
 테스트 결과는 **HTML Report**로 생성되며, 각 테스트 함수 실행 과정은 **동영상으로 기록**되어 디버깅 및 결과 검증에 활용할 수 있습니다.
 
@@ -19,19 +18,6 @@ Appium 서버는 Docker image로 관리하여 프레임워크 및 버전 종속�
 git clone https://github.com/leeyeonjung/appium_the_app.git
 cd appium_the_app
 ```
-
----
-
-## Appium Server
-1. Docker 설치  
-2. `Appium_Server/Dockerfile`을 기반으로 Docker 이미지 빌드  
-   ```bash
-   docker build -t my-appium:3.0.2 .
-   ```  
-3. `Appium_Server/docker-compose.yml` 파일을 이용하여 컨테이너 실행 (포트는 `localhost:4723`으로 매핑됨)  
-   ```bash
-   docker compose up -d
-   ```
 
 ---
 
