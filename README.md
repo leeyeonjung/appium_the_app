@@ -7,9 +7,9 @@
 
 ---
 
-## Version Information
+## Version Information (아래 버전 이상 권장)
 - Python **3.13.7**  
-- Appium **3.0.2**
+- Appium **3.0.2** 
 
 ---
 
