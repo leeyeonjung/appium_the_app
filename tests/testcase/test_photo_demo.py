@@ -14,139 +14,264 @@ from tests.common_util import control_image as control_image
 
 log = logging.getLogger()
 
-BASE_DIR = Path(__file__).resolve().parents[1]  # tests/
-IMAGE_DIR = BASE_DIR / "image"
 
-def test_image(wd):
+BASE_DIR = Path(__file__).resolve().parents[1]  # BASE_DIR : tests/ 하위 경로
+IMAGE_DIR = BASE_DIR / "image"  # IMAGE_DIR : 비교할 original image 경로
 
-    #Photo Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
-    sleep(0.5)
 
+def test_into_photo_demo(wd):
+    # Photo Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+
+    # Action_bar_root 아래 자식 TextView element 지정
+    title = element.xpath(
+        wd,
+        '//android.widget.LinearLayout[@resource-id="com.appiumpro.the_app:id/action_bar_root"]//android.widget.TextView'
+    )
+
+    # Assertion: Title text가 "Photo Library. Tap a photo!"인지 확인
+    check.equal(title.text, "Photo Library. Tap a photo!")
+
+
+def test_photo(wd):
+
+    # 폴더 구분을 위한 기기 udid 저장
+    device_id = wd.capabilities.get("udid")
+
+    # 캡쳐 이미지 저장 경로 정의
+    save_dir = BASE_DIR / "Result" / "📸image📸" / device_id / "test_photo"
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+    # Photo Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+    sleep(1)
+
+    # 비교할 원본 이미지 경로
     expected = {
-        str(IMAGE_DIR / "original_1.jpg"),
-        str(IMAGE_DIR / "original_2.jpg"),
-        str(IMAGE_DIR / "original_3.jpg"),
-        str(IMAGE_DIR / "original_4.jpg"),
-        str(IMAGE_DIR / "original_5.jpg"),
-        str(IMAGE_DIR / "original_6.jpg"),
+        str(IMAGE_DIR / "original_1.png"),
+        str(IMAGE_DIR / "original_2.png"),
+        str(IMAGE_DIR / "original_3.png"),
+        str(IMAGE_DIR / "original_4.png"),
+        str(IMAGE_DIR / "original_5.png"),
+        str(IMAGE_DIR / "original_6.png"),
     }
 
-    # ScrollView 안의 모든 ImageView 가져오기
-    elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
-    log.info(elements)
+    # swipe를 위한 기기 해상도 조회
+    win = wd.get_window_rect()
+    win_w, win_h = win["width"], win["height"]
+    log.info(f"📱 Window size: {win_w}x{win_h}")
 
-    used_elements = set()
-    found = set()
+    captured, seen_rects, verified_images = set(), set(), set()
 
-    for ref in expected:
-        best_score = -1
-        best_el = None
+    # 정사각형으로 노출된 이미지는 저장 (기존에 저장 된 이미지는 저장하지 않도록 중복 방지 처리)
+    def capture_visible_images():
+        elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
+        log.info(f"[SCAN] Found {len(elements)} ImageViews")
 
-        for idx, el in enumerate(elements, start=1):
-            if idx in used_elements:
+        for el in elements:
+            rect = el.rect
+            x, y, w, h = rect["x"], rect["y"], rect["width"], rect["height"]
+            bottom, right = y + h, x + w
+
+            fully_visible = (x >= -10 and y >= 0 and right <= win_w + 10 and bottom <= win_h + 30)
+            square_like = abs(w - h) < 20
+            if not (fully_visible and square_like):
                 continue
 
-            screenshot = control_image.open(BytesIO(el.screenshot_as_png)).convert("RGB")
+            # 중복 판별 강화 (좌표 오차 허용)
+            duplicate_found = False
+            for (sx, sy, sw, sh) in seen_rects:
+                # 좌표 오차 ±25px, 크기 오차 ±10px 이내면 동일 이미지로 간주하여 저장 하지 않음
+                if abs(sx - x) < 25 and abs(sy - y) < 25 and abs(sw - w) < 10 and abs(sh - h) < 10:
+                    duplicate_found = True
+                    break
+            if duplicate_found:
+                log.info(f"[SKIP] Duplicate image detected at (x={x}, y={y})")
+                continue
+
+            # 중복 아닌 경우에는 이미지 저장
+            path = save_dir / f"captured_{len(captured)+1}.png"
+            with open(path, "wb") as f:
+                f.write(el.screenshot_as_png)
+            seen_rects.add((x, y, w, h))
+            captured.add(str(path))
+            log.info(f"[SAVE] {path.name} ({w}x{h}) at (x={x}, y={y})")
+
+    # 스와이프 동작 (Appium 3.x 버전 해당)
+    def swipe(step=0.45):
+        start_x = win_w // 2
+        start_y = int(win_h * 0.75)
+        end_y = int(win_h * (0.75 - step))
+        log.info(f"[SWIPE] ({start_x},{start_y}) → ({start_x},{end_y})")
+        wd.swipe(start_x, start_y, start_x, end_y, 900)
+        sleep(1.2)
+
+    # 스크롤하며 이미지 수집
+    for _ in range(6):
+        before = len(captured)
+        capture_visible_images()
+        if len(captured) >= 6:
+            log.info("All 6 images captured.")
+            break
+        swipe(step=0.45)
+        after = len(captured)
+        if after == before:
+            log.info("No new images detected after swipe.")
+            break
+
+    log.info(f"Captured {len(captured)} images in total.")
+
+    # control_image.py 이용한 이미지 비교 (SSIM)
+    for ref in expected:
+        best_score, best_path = -1, None
+        for path in captured:
+            screenshot = control_image.open(path).convert("RGB")
             score = control_image.compare(screenshot, ref)
-
-            # 매번 점수 로그 찍기
-            log.info(f"[Compare] {ref} vs element {idx} → {score:.2f}")
-
             if score > best_score:
-                best_score = score
-                best_el = idx
+                best_score, best_path = score, path
 
-        # 최종 매칭 결과
+    # 이미지 비교 score가 90 이상인 경우 verified_images에 추가
         if best_score >= 90:
-            used_elements.add(best_el)
-            found.add(ref)
-            log.info(f"[PASS] {ref} matched with element {best_el} (score {best_score:.2f})")
+            verified_images.add(ref)
+            log.info(f"[PASS] {ref} matched {best_path} ({best_score:.2f})")
         else:
-            log.warning(f"[FAIL] {ref} best match was element {best_el} (score {best_score:.2f})")
+            log.warning(f"[FAIL] {ref} best {best_path} ({best_score:.2f})")
 
-    # 마지막에 전체 결과 확인
-    log.info(f"Found: {found}")
-    check.equal(found, expected, f"Not all images matched correctly. Found: {found}")
+    expected_count = len(expected)
+    log.info(f"📊 Verified {len(verified_images)} / {expected_count} images.")
+
+    # Assertion: 실제 확인 된 image가 6개 인지 확인
+    check.equal(verified_images, expected, f"[VERIFY FAIL] Some images not matched. Found: {verified_images}")
 
 
 def test_image_text(wd):
 
-    #Photo Demo 화면 진입
+    # 폴더 구분을 위한 기기 udid 저장
+    device_id = wd.capabilities.get("udid")
+
+    # 캡쳐 이미지 저장 경로 정의
+    save_dir = BASE_DIR / "Result" / "📸image📸" / device_id / "test_image_text"
+    save_dir.mkdir(parents=True, exist_ok=True)
+
+    # Photo Demo 진입
     element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
-    sleep(0.5)
+    sleep(1)
 
-    expected = {
-        str(IMAGE_DIR / "original_1.jpg"),
-        str(IMAGE_DIR / "original_2.jpg"),
-        str(IMAGE_DIR / "original_3.jpg"),
-        str(IMAGE_DIR / "original_4.jpg"),
-        str(IMAGE_DIR / "original_5.jpg"),
-        str(IMAGE_DIR / "original_6.jpg"),
-    }
-
-    # ScrollView 안의 모든 ImageView 가져오기
-    elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
-    log.info(f"elements count = {len(elements)}")
-
-    # Expected Text 
     expected_texts = {
-        "original_1.jpg": "This is a picture of: 2 tanker ships with snowy mountains in the background",
-        "original_2.jpg": "This is a picture of: Wispy clouds in a blue sky",
-        "original_3.jpg": "This is a picture of: English bay with snowy mountains",
-        "original_4.jpg": "This is a picture of: The Vancouver skyline at sunrise",
-        "original_5.jpg": "This is a picture of: A long thin cloud below mountain level",
-        "original_6.jpg": "This is a picture of: Imposing mountains and West Vancouver"
+        "original_1.png": "This is a picture of: 2 tanker ships with snowy mountains in the background",
+        "original_2.png": "This is a picture of: Wispy clouds in a blue sky",
+        "original_3.png": "This is a picture of: English bay with snowy mountains",
+        "original_4.png": "This is a picture of: The Vancouver skyline at sunrise",
+        "original_5.png": "This is a picture of: A long thin cloud below mountain level",
+        "original_6.png": "This is a picture of: Imposing mountains and West Vancouver"
     }
 
-    used_elements = set()
+    # IMAGE_DIR + expected_texts의 key 값으로 원본이미지 확인
+    expected_images = [str(IMAGE_DIR / name) for name in expected_texts.keys()]
 
-    for ref in expected:
-        best_score = -1
-        best_el = None
+    # swipe를 위한 기기 해상도 조회
+    win = wd.get_window_rect()
+    win_w, win_h = win["width"], win["height"]
 
-        # 🚩 매 루프마다 fresh elements 다시 가져오기
-        elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
-        log.info(f"elements count = {len(elements)}")
+    captured, seen_rects = set(), set()
+    matched_count = 0
 
-        for idx, el in enumerate(elements, start=1):
-            if idx in used_elements:
+    # 스와이프 동작 (Appium 3.x 버전 해당)
+    def swipe(step=0.45):
+        start_x = win_w // 2
+        start_y = int(win_h * 0.75)
+        end_y = int(win_h * (0.75 - step))
+        log.info(f"[SWIPE short] ({start_x},{start_y}) → ({start_x},{end_y})")
+        wd.swipe(start_x, start_y, start_x, end_y, 800)
+        sleep(1.2)
+
+    # 이미지 비교와 text 검증 (기존에 저장 된 이미지는 확인하지 않도록 중복 방지 처리)
+    def capture_and_check():
+        nonlocal matched_count
+        elements = element.xpaths(wd, "//android.widget.ImageView")
+        log.info(f"[SCAN] Found {len(elements)} ImageViews")
+
+        for el in elements:
+            rect = el.rect
+            x, y, w, h = rect["x"], rect["y"], rect["width"], rect["height"]
+            bottom, right = y + h, x + w
+
+            fully_visible = (x >= -10 and y >= 0 and right <= win_w + 10 and bottom <= win_h + 30)
+            square_like = abs(w - h) < 20
+            if not (fully_visible and square_like):
                 continue
 
-            screenshot = control_image.open(BytesIO(el.screenshot_as_png)).convert("RGB")
-            score = control_image.compare(screenshot, ref)
+            # 중복 판별 강화 (좌표 오차 허용)
+            duplicate_found = False
+            for (sx, sy, sw, sh) in seen_rects:
+                # 좌표 오차 ±25px, 크기 오차 ±10px 이내면 동일 이미지로 간주
+                if abs(sx - x) < 25 and abs(sy - y) < 25 and abs(sw - w) < 10 and abs(sh - h) < 10:
+                    duplicate_found = True
+                    break
+            if duplicate_found:
+                continue
 
-            log.info(f"[Compare] {ref} vs element {idx} → {score:.2f}")
+            # 중복 아닌 경우 이미지 저장
+            path = save_dir / f"captured_{len(captured)+1}.png"
+            with open(path, "wb") as f:
+                f.write(el.screenshot_as_png)
+            seen_rects.add((x, y, w, h))
+            captured.add(str(path))
+            log.info(f"[SAVE] {path.name} ({w}x{h}) at (x={x}, y={y})")
 
-            if score > best_score:
-                best_score = score
-                best_el = idx
+            # 원본 이미지와 비교하여 클릭 후, text 비교
+            screenshot = control_image.open(path).convert("RGB")
+            best_score, matched_ref = -1, None
+            for ref in expected_images:
+                ref_name = os.path.basename(ref)
+                if ref_name in verified_texts:
+                    continue
+                score = control_image.compare(screenshot, ref)
+                if score > best_score:
+                    best_score, matched_ref = score, ref
+            if best_score < 85 or matched_ref is None:
+                log.warning(f"[SKIP] {path.name} similarity too low ({best_score:.2f})")
+                continue
 
-        if best_score >= 90:
-            used_elements.add(best_el)
-            log.info(f"[PASS] {ref} matched with element {best_el} (score {best_score:.2f})")
+            matched_name = os.path.basename(matched_ref)
+            expected_text = expected_texts[matched_name]
+            log.info(f"[MATCH] {path.name} ↔ {matched_name} ({best_score:.2f})")
 
-            # fresh elements 다시 조회 → stale 방지
-            elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
-            target_el = elements[best_el - 1]
-            target_el.click()
-            log.info(f"Clicked element {best_el} for {ref}")
+            el.click()
+            sleep(0.5)
+            dialog = element.xpath(wd, '//android.widget.TextView[@resource-id="android:id/message"]')
+            actual = dialog.text.strip()
+            check.equal(actual, expected_text, f"[TEXT FAIL] {matched_name}")
+            log.info(f"[TEXT PASS] {matched_name}: '{actual}'")
 
-            # 결과 텍스트 확인
-            result_text_element = element.xpath(
-                wd, '//android.widget.TextView[@resource-id="android:id/message"]'
-            )
-            result_text = result_text_element.text.strip()
+            ok = element.xpath(wd, '//android.widget.Button[@resource-id="android:id/button1"]')
+            ok.click()
+            sleep(0.8)
 
-            ref_filename = os.path.basename(ref)
-            expected_text = expected_texts[ref_filename]
+            verified_texts.add(matched_name)
+            matched_count += 1
 
-            check.equal(result_text, expected_text, f"[CHECK FAIL] {ref_filename}")
-            log.info(f"[CHECK PASS] {ref_filename}: Got expected text '{result_text}'")
+    # 스크롤 반복 — 새 이미지 없으면 중단
+    verified_texts = set()
 
-            # 🚩 OK 버튼 눌러서 다이얼로그 닫기
-            ok_button = element.xpath(wd, '//android.widget.Button[@resource-id="android:id/button1"]')
-            ok_button.click()
-            log.info("Dialog closed with OK button")
-        else:
-            log.warning(f"[FAIL] {ref} best match was element {best_el} (score {best_score:.2f})")
+    for _ in range(6):
+        before = len(verified_texts)
+        capture_and_check()
+
+        # 모든 expected text가 통과되면 중단
+        if len(verified_texts) >= len(expected_texts):
+            log.info("✅ All expected images verified. Stopping scroll.")
+            break
+
+        swipe(step=0.45)
+        after = len(verified_texts)
+        if after == before:
+            log.info("🔚 No new verifications after swipe. Stopping.")
+            break
+
+    expected_count = len(expected_texts)
+    log.info(f"📸 Captured {len(captured)} images, verified {matched_count}")
+    # Assertion: 실제 확인 된 image가 6개 인지 확인
+    check.equal(len(verified_texts), expected_count,
+                f"[VERIFY FAIL] Only {len(verified_texts)}/{expected_count} verified")
+    log.info("All expected images successfully captured and verified.")

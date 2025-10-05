@@ -10,226 +10,230 @@ from tests.common_util import find_elements as element
 
 log = logging.getLogger()
 
+
+def test_webview_demo_placeholder(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
+
+    # 입력창 element 지정
+    inputfield = element.acc_id(wd, "urlInput")
+
+    # Assertion: placeholder 값이 "https://appiumpro.com"인지 확인
+    check.equal(inputfield.text, "https://appiumpro.com")
+
+
 def test_webview_context(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # Assertion : 현재 driver의 "WEBVIEW_com.appiumpro.the_app"로 전환되어 웹뷰 정상적으로 노출 됨
+    # Assertion: 현재 driver context가 "WEBVIEW_com.appiumpro.the_app"인지 확인
     check.equal(wd.current_context, "WEBVIEW_com.appiumpro.the_app")
 
 
 def test_get_certified(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Get Certified! 선택
+    # Get Certified 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[1]/a').click()
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'Appium Pro Training, Tutorials, and Certification'
+    # Assertion: title이 'Appium Pro Training, Tutorials, and Certification'인지 확인
     check.equal(title, 'Appium Pro Training, Tutorials, and Certification')
 
 
 def test_subscribe(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Subscribe 선택
+    # Subscribe 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[2]/a').click()
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'Subscribe Now'
+    # Assertion: title이 'Subscribe Now'인지 확인
     check.equal(title, 'Subscribe Now')
 
 
 def test_latest(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Subscribe 선택
+    # Latest 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[3]/a').click()
 
     time.sleep(1.0)
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'Edition 124'
+    # Assertion: title이 'Edition 124'인지 확인
     check.equal(title, 'Edition 124')
 
 
 def test_all_editions(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Subscribe 선택
+    # All Editions 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[4]/a').click()
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'All Editions'
+    # Assertion: title이 'All Editions'인지 확인
     check.equal(title, 'All Editions')
 
 
 def test_sponsors(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Subscribe 선택
+    # Sponsors 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[5]/a').click()
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'Sponsors'
+    # Assertion: title이 'Sponsors'인지 확인
     check.equal(title, 'Sponsors')
 
 
 def test_contact(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Subscribe 선택
+    # Contact 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[6]/a').click()
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'Contact Us'
+    # Assertion: title이 'Contact Us'인지 확인
     check.equal(title, 'Contact Us')
 
 
 def test_about(wd):
+    # Webview Demo 화면 진입
+    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
-    #Webview Demo 화면 진입
-    element.xpath(wd,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
-
-    # url 입력 필드에 "https://appiumpro.com" 입력
+    # url 입력 필드에 주소 입력
     inputfield = element.acc_id(wd, "urlInput")
     inputfield.send_keys("https://appiumpro.com")
 
-    # Go 버튼 선택
+    # Go 버튼 클릭
     go_button = element.acc_id(wd, "navigateBtn")
     go_button.click()
 
-    # context webview로 전환
+    # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # 우측 햄버거 바 선택
+    # 햄버거 바 클릭
     element.xpath(wd, '/html/body/div/div/div[2]/div/div/a/img').click()
 
-    # Subscribe 선택
+    # About 메뉴 선택
     element.xpath(wd, '/html/body/div/div/div[2]/div/ul/li[7]/a').click()
 
-    # title 확인
-    title = (element.xpath(wd, '/html/body/div/div/div[3]/h1')).text
+    # 타이틀 텍스트 가져오기
+    title = element.xpath(wd, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion : title이 'About'
+    # Assertion: title이 'About'인지 확인
     check.equal(title, 'About')

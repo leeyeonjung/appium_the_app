@@ -12,7 +12,13 @@ def xpaths(driver, data):
     return driver.find_elements(By.XPATH, data)
 
 def id(driver, data):
+    return driver.find_element(By.ID, data)
+
+def appium_id(driver, data):
     return driver.find_element(AppiumBy.ID, data)
 
 def acc_id(driver, data):
     return driver.find_element(AppiumBy.ACCESSIBILITY_ID, data)
+
+def android_uiautomator(driver, data):
+    return driver.find_element('-android uiautomator', data)
