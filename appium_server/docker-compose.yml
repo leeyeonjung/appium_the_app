@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  appium:
+    image: appium/appium:latest
+    network_mode: host
+    container_name: appium
+    restart: always
+    user: root
+    ports:
+      - "4723:4723"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./logs:/logs
+      - ./entrypoint.sh:/entrypoint.sh
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]

@@ -36,7 +36,8 @@ def test_into_photo_demo(wd):
 def test_photo(wd):
 
     # 폴더 구분을 위한 기기 udid 저장
-    device_id = wd.capabilities.get("udid")
+    raw_device_id = wd.capabilities.get("udid") or wd.capabilities.get("deviceUDID") or "unknown_device"
+    device_id = str(raw_device_id).replace(":", "_").replace("/", "_").replace("\\", "_")
 
     # 캡쳐 이미지 저장 경로 정의
     save_dir = BASE_DIR / "Result" / "📸image📸" / device_id / "test_photo"
@@ -147,7 +148,8 @@ def test_photo(wd):
 def test_image_text(wd):
 
     # 폴더 구분을 위한 기기 udid 저장
-    device_id = wd.capabilities.get("udid")
+    raw_device_id = wd.capabilities.get("udid") or wd.capabilities.get("deviceUDID") or "unknown_device"
+    device_id = str(raw_device_id).replace(":", "_").replace("/", "_").replace("\\", "_")
 
     # 캡쳐 이미지 저장 경로 정의
     save_dir = BASE_DIR / "Result" / "📸image📸" / device_id / "test_image_text"
