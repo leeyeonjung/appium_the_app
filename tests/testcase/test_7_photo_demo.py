@@ -1,15 +1,15 @@
 # Standard library
 import logging
 import os
-from io import BytesIO
 from time import sleep
 from pathlib import Path
+from selenium.webdriver.common.by import By
+from appium.webdriver.common.appiumby import AppiumBy
 
 # Third-party libraries
 import pytest_check as check
 
 # Local modules
-from tests.common_util import find_elements as element
 from tests.common_util import control_image as control_image
 
 log = logging.getLogger()
@@ -21,11 +21,11 @@ IMAGE_DIR = BASE_DIR / "image"  # IMAGE_DIR : 비교할 original image 경로
 
 def test_into_photo_demo(wd):
     # Photo Demo 화면 진입
-    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+    wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
 
     # Action_bar_root 아래 자식 TextView element 지정
-    title = element.xpath(
-        wd,
+    title = wd.find_element(
+        By.XPATH,
         '//android.widget.LinearLayout[@resource-id="com.appiumpro.the_app:id/action_bar_root"]//android.widget.TextView'
     )
 
@@ -44,7 +44,7 @@ def test_photo(wd):
     save_dir.mkdir(parents=True, exist_ok=True)
 
     # Photo Demo 화면 진입
-    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+    wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
     sleep(1)
 
     # 비교할 원본 이미지 경로
@@ -66,7 +66,7 @@ def test_photo(wd):
 
     # 정사각형으로 노출된 이미지는 저장 (기존에 저장 된 이미지는 저장하지 않도록 중복 방지 처리)
     def capture_visible_images():
-        elements = element.xpaths(wd, "//android.widget.ScrollView//android.widget.ImageView")
+        elements = wd.find_elements(By.XPATH, "//android.widget.ScrollView//android.widget.ImageView")
         log.info(f"[SCAN] Found {len(elements)} ImageViews")
 
         for el in elements:
@@ -156,7 +156,7 @@ def test_image_text(wd):
     save_dir.mkdir(parents=True, exist_ok=True)
 
     # Photo Demo 진입
-    element.xpath(wd, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
+    wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
     sleep(1)
 
     expected_texts = {
@@ -190,7 +190,7 @@ def test_image_text(wd):
     # 이미지 비교와 text 검증 (기존에 저장 된 이미지는 확인하지 않도록 중복 방지 처리)
     def capture_and_check():
         nonlocal matched_count
-        elements = element.xpaths(wd, "//android.widget.ImageView")
+        elements = wd.find_elements(By.XPATH, "//android.widget.ImageView")
         log.info(f"[SCAN] Found {len(elements)} ImageViews")
 
         for el in elements:
@@ -241,12 +241,12 @@ def test_image_text(wd):
 
             el.click()
             sleep(0.5)
-            dialog = element.xpath(wd, '//android.widget.TextView[@resource-id="android:id/message"]')
+            dialog = wd.find_element(By.XPATH, '//android.widget.TextView[@resource-id="android:id/message"]')
             actual = dialog.text.strip()
             check.equal(actual, expected_text, f"[TEXT FAIL] {matched_name}")
             log.info(f"[TEXT PASS] {matched_name}: '{actual}'")
 
-            ok = element.xpath(wd, '//android.widget.Button[@resource-id="android:id/button1"]')
+            ok = wd.find_element(By.XPATH, '//android.widget.Button[@resource-id="android:id/button1"]')
             ok.click()
             sleep(0.8)
 

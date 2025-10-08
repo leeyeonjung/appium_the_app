@@ -1,11 +1,11 @@
 # Standard library
 import logging
+from time import sleep
+from selenium.webdriver.common.by import By
+from appium.webdriver.common.appiumby import AppiumBy
 
 # Third-party libraries
 import pytest_check as check
-
-# Local modules
-from tests.common_util import find_elements as element
 
 log = logging.getLogger()
 
@@ -20,7 +20,7 @@ def test_homescreen_01(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[1]//android.widget.TextView[@resource-id="listItemTitle"]'
 
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
 
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -37,7 +37,7 @@ def test_homescreen_02(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[2]//android.widget.TextView[@resource-id="listItemTitle"]'
 
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
 
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -54,7 +54,7 @@ def test_homescreen_03(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[3]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -71,7 +71,7 @@ def test_homescreen_04(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -88,7 +88,7 @@ def test_homescreen_05(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[5]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -105,7 +105,7 @@ def test_homescreen_06(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[6]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -122,7 +122,7 @@ def test_homescreen_07(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -139,7 +139,7 @@ def test_homescreen_08(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[8]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -156,7 +156,7 @@ def test_homescreen_09(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[9]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
@@ -173,7 +173,7 @@ def test_homescreen_10(wd):
     value = '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[10]//android.widget.TextView[@resource-id="listItemTitle"]'
     
     # xpath로 elements 요소 가져오기
-    elements = element.xpaths(wd, value)
+    elements = wd.find_elements(By.XPATH, value)
     
     # elements의 각 내용을 log로 출력
     for idx, el in enumerate(elements, start=1):
