@@ -11,6 +11,7 @@ log = logging.getLogger()
 
 
 def test_into_echo_box(wd):
+
     # Echo Box 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[1]').click()
 
@@ -20,22 +21,24 @@ def test_into_echo_box(wd):
         '//android.widget.LinearLayout[@resource-id="com.appiumpro.the_app:id/action_bar_root"]//android.widget.TextView'
     )
     
-    # Assertion: Title text가 "Echo Screen"인지 확인
+    # Assertion: Title text가 "Echo Screen"임
     check.equal(title.text, "Echo Screen")
 
 
 def test_echo_box_placeholder(wd):
+
     # Echo Box 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[1]').click()
 
     # 입력창 element 지정
     inputfield = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "messageInput")
 
-    # Assertion: placeholder 값이 "Say something"인지 확인
+    # Assertion: placeholder 값이 "Say something"임
     check.equal(inputfield.text, "Say something")
 
 
 def test_inputfield_function_01(wd):
+
     # Echo Box 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[1]').click()
 
@@ -60,11 +63,12 @@ def test_inputfield_function_01(wd):
     # 저장된 메시지 element 지정
     result = wd.find_element(By.XPATH, "//*[@resource-id='savedMessage']")
 
-    # Assertion: 저장된 메시지가 입력 텍스트와 동일한지 확인
+    # Assertion: 저장된 메시지가 입력 텍스트와 동일함
     check.equal(result.text, input_text)
 
 
 def test_inputfield_function_02(wd):
+
     # Echo Box 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[1]').click()
 
@@ -91,5 +95,5 @@ def test_inputfield_function_02(wd):
     # 저장된 메시지 element 지정
     result = wd.find_element(By.XPATH, "//*[@resource-id='savedMessage']")
 
-    # Assertion: 저장된 메시지가 두 번째 입력 텍스트와 동일한지 확인
+    # Assertion: 저장된 메시지가 두 번째 입력 텍스트와 동일함
     check.equal(result.text, input_text2)

@@ -11,17 +11,19 @@ log = logging.getLogger()
 
 
 def test_webview_demo_placeholder(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
     # 입력창 element 지정
     inputfield = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "urlInput")
 
-    # Assertion: placeholder 값이 "https://appiumpro.com"인지 확인
+    # Assertion: placeholder 값이 "https://appiumpro.com"임
     check.equal(inputfield.text, "https://appiumpro.com")
 
 
 def test_webview_context(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -36,11 +38,12 @@ def test_webview_context(wd):
     # context를 webview로 전환
     wd.switch_to.context("WEBVIEW_com.appiumpro.the_app")
 
-    # Assertion: 현재 driver context가 "WEBVIEW_com.appiumpro.the_app"인지 확인
+    # Assertion: 현재 driver context가 "WEBVIEW_com.appiumpro.the_app"임
     check.equal(wd.current_context, "WEBVIEW_com.appiumpro.the_app")
 
 
 def test_get_certified(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -64,11 +67,12 @@ def test_get_certified(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'Appium Pro Training, Tutorials, and Certification'인지 확인
+    # Assertion: title이 'Appium Pro Training, Tutorials, and Certification'임
     check.equal(title, 'Appium Pro Training, Tutorials, and Certification')
 
 
 def test_subscribe(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -92,11 +96,12 @@ def test_subscribe(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'Subscribe Now'인지 확인
+    # Assertion: title이 'Subscribe Now'임
     check.equal(title, 'Subscribe Now')
 
 
 def test_latest(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -122,11 +127,12 @@ def test_latest(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'Edition 124'인지 확인
+    # Assertion: title이 'Edition 124'임
     check.equal(title, 'Edition 124')
 
 
 def test_all_editions(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -150,11 +156,12 @@ def test_all_editions(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'All Editions'인지 확인
+    # Assertion: title이 'All Editions'임
     check.equal(title, 'All Editions')
 
 
 def test_sponsors(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -178,11 +185,12 @@ def test_sponsors(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'Sponsors'인지 확인
+    # Assertion: title이 'Sponsors'임
     check.equal(title, 'Sponsors')
 
 
 def test_contact(wd):
+
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -206,11 +214,12 @@ def test_contact(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'Contact Us'인지 확인
+    # Assertion: title이 'Contact Us'임
     check.equal(title, 'Contact Us')
 
 
 def test_about(wd):
+    
     # Webview Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[4]').click()
 
@@ -234,5 +243,5 @@ def test_about(wd):
     # 타이틀 텍스트 가져오기
     title = wd.find_element(By.XPATH, '/html/body/div/div/div[3]/h1').text
 
-    # Assertion: title이 'About'인지 확인
+    # Assertion: title이 'About'임
     check.equal(title, 'About')

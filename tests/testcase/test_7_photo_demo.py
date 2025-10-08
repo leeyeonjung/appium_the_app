@@ -20,6 +20,7 @@ IMAGE_DIR = BASE_DIR / "image"  # IMAGE_DIR : 비교할 original image 경로
 
 
 def test_into_photo_demo(wd):
+
     # Photo Demo 화면 진입
     wd.find_element(By.XPATH, '(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[7]').click()
 
@@ -29,7 +30,7 @@ def test_into_photo_demo(wd):
         '//android.widget.LinearLayout[@resource-id="com.appiumpro.the_app:id/action_bar_root"]//android.widget.TextView'
     )
 
-    # Assertion: Title text가 "Photo Library. Tap a photo!"인지 확인
+    # Assertion: Title text가 "Photo Library. Tap a photo!"임
     check.equal(title.text, "Photo Library. Tap a photo!")
 
 
@@ -141,7 +142,7 @@ def test_photo(wd):
     expected_count = len(expected)
     log.info(f"📊 Verified {len(verified_images)} / {expected_count} images.")
 
-    # Assertion: 실제 확인 된 image가 6개 인지 확인
+    # Assertion: 실제 확인 된 image가 6개임
     check.equal(verified_images, expected, f"[VERIFY FAIL] Some images not matched. Found: {verified_images}")
 
 
@@ -262,7 +263,7 @@ def test_image_text(wd):
 
         # 모든 expected text가 통과되면 중단
         if len(verified_texts) >= len(expected_texts):
-            log.info("✅ All expected images verified. Stopping scroll.")
+            log.info("All expected images verified. Stopping scroll.")
             break
 
         swipe(step=0.45)
@@ -273,7 +274,7 @@ def test_image_text(wd):
 
     expected_count = len(expected_texts)
     log.info(f"📸 Captured {len(captured)} images, verified {matched_count}")
-    # Assertion: 실제 확인 된 image가 6개 인지 확인
+    # Assertion: 실제 확인 된 image가 6개임
     check.equal(len(verified_texts), expected_count,
                 f"[VERIFY FAIL] Only {len(verified_texts)}/{expected_count} verified")
     log.info("All expected images successfully captured and verified.")
