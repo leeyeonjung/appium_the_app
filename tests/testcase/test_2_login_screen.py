@@ -77,6 +77,36 @@ def test_login_success(wd):
     check.equal("You are logged in as alice" in texts, True)
 
 
+def test_login_fail(wd):
+
+    # Login Screen 화면 진입
+    wd.find_element(By.XPATH,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[2]').click()
+
+    # id 입력 필드 element를 조회하여 idfield 변수에 할당
+    idfield = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "username")
+    # id 입력란에 유효한 id (alice) 입력
+    idfield.send_keys("alice")
+    sleep(1.0)
+
+    # 비밀번호 입력 필드 element를 조회하여 pwfield 변수에 할당
+    pwfield = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "password")
+    # pw 입력란에 비유효한 pw (test) 입력    
+    pwfield.send_keys("test")
+    sleep(1.0)
+
+    # login 버튼 element를 조회하여 loginbtn 변수에 할당
+    loginbtn = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "loginBtn")
+    # loginbtn 클릭
+    loginbtn.click()
+    sleep(1.0)
+
+    # alert 메시지 조회하여 alertmsg 변수에 할당
+    alertmsg = wd.find_element(AppiumBy.ID, "android:id/message")
+
+    # Assertion : alertmsg가 "Invalid login credentials, please try again" 임
+    check.equal(alertmsg.text, "Invalid login credentials, please try again")
+
+
 def test_logout_success(wd):
 
     # Login Screen 화면 진입
@@ -112,33 +142,3 @@ def test_logout_success(wd):
     
     # Assertion : 로그아웃되어 다시 로그인 화면으로 진입 후, Title text가 "Login"임
     check.equal(title.text, "Login")
-
-
-def test_login_fail(wd):
-
-    # Login Screen 화면 진입
-    wd.find_element(By.XPATH,'(//android.view.ViewGroup[@resource-id="RNE__LISTITEM__padView"])[2]').click()
-
-    # id 입력 필드 element를 조회하여 idfield 변수에 할당
-    idfield = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "username")
-    # id 입력란에 유효한 id (alice) 입력
-    idfield.send_keys("alice")
-    sleep(1.0)
-
-    # 비밀번호 입력 필드 element를 조회하여 pwfield 변수에 할당
-    pwfield = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "password")
-    # pw 입력란에 비유효한 pw (test) 입력    
-    pwfield.send_keys("test")
-    sleep(1.0)
-
-    # login 버튼 element를 조회하여 loginbtn 변수에 할당
-    loginbtn = wd.find_element(AppiumBy.ACCESSIBILITY_ID, "loginBtn")
-    # loginbtn 클릭
-    loginbtn.click()
-    sleep(1.0)
-
-    # alert 메시지 조회하여 alertmsg 변수에 할당
-    alertmsg = wd.find_element(AppiumBy.ID, "android:id/message")
-
-    # Assertion : alertmsg가 "Invalid login credentials, please try again" 임
-    check.equal(alertmsg.text, "Invalid login credentials, please try again")
