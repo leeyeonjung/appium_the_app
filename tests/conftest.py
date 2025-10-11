@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 # 📱 Device Configuration
 devices = [
-    # AWS EC2에 Docker로 기동된 Appium Server 사용
+    # AWS EC2에 Docker로 기동된 Appium Server와 연결하여 사용
     pytest.param(
         {"udid": "localhost:5555", "systemPort": 8200, "server_url": "http://43.201.251.15:4723"},
         id="localhost:5555"
@@ -44,7 +44,7 @@ def wd(request):
 
 
 # 🎥 Test Video Recording Fixture
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True) # 비디오 녹화 불필요시 autouse=False 변경하여 사용 가능.
 def record_video(request, wd):
 
     # 테스트 스크립트 파일명
