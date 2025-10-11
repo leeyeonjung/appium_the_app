@@ -7,8 +7,8 @@ __pycache__/
 # pytest cache
 .pytest_cache/
 
-# 모든 APK 무시
+# 최초 upload를 제외한 APK push하지 않음
 *.apk
 
-# 로그 추적용 명령어 기록
+# 개인 메모용 text 파일 push하지 않음
 /write.txt
