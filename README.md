@@ -38,7 +38,6 @@ appium_the_app/
 │   ├── conftest.py                         # pytest 전역 설정 및 Appium driver fixture
 │   ├── common_util/
 │   │   ├── control_image.py                # 이미지 비교 (SSIM 기반)
-│   │   └── find_elements.py                # Element 조회 유틸
 │   ├── image/                              # baseline 이미지 (비교용)
 │   │   ├── original_1.png ~ original_6.png
 │   └── testcase/                           # 기능별 테스트 모듈
