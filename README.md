@@ -95,9 +95,8 @@ docker compose up -d
 ```
 
 ### ▶️ Jenkins 원격 실행 (AWS EC2)
-- AWS EC2에 구축된 Jenkins에서 **Windows 로컬 테스트 환경을 원격으로 제어**하여 테스트를 실행  
-- Jenkins 파이프라인 또는 빌드 단계에서 원격 명령(`pytest -v --maxfail=1 --disable-warnings`)을 전송해 테스트 수행  
-- 테스트 결과(HTML Report 및 동영상)는 **Windows 로컬 환경의 `tests/Result/` 폴더**에 자동 저장  
+- AWS EC2에 구축된 Jenkins에서 **Windows 로컬 테스트 환경을 원격으로 제어**하여 테스트를 실행 
+- 테스트 결과(HTML Report 및 동영상)는 실행환경의 `tests/Result/` 폴더에 자동 저장  
 - Jenkins 콘솔 로그를 통해 테스트 진행 상황과 결과 요약을 실시간으로 확인 가능
 
 ---
