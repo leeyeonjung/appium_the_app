@@ -58,12 +58,10 @@ appium_the_app/
 ### 1️⃣ **Appium 자동화 테스트**
 - Appium에서 공식 제공하는 *The App* 일부 기능을 테스트 대상으로 선정  
 - 각 화면 진입 및 UI 요소 검증 자동화  
-- foldable / standard 디바이스 해상도에 대응  
 
 ### 2️⃣ **Pytest 기반 모듈화 구조**
 - `conftest.py`에서 **driver fixture**를 관리  
-- 각 기능별 테스트는 독립 실행 가능 (`pytest -k "photo_demo"`)  
-- `common_util` 모듈에서 Element 제어 / 이미지 비교 / 로깅 기능 통합 관리  
+- 각 기능별 테스트는 독립 실행 가능 (e.g: `pytest /tests/testcase/test_2_login_screen.py::test_into_login_screen`)   
 
 ### 3️⃣ **HTML Report & Video Recording**
 - 실행 시 자동으로 HTML 리포트 생성  
@@ -86,7 +84,7 @@ appium_the_app/
 
 ### ▶️ 로컬 실행
 ```bash
-pip install -r requirements.txt
+pip install -r /tests/requirements.txt
 pytest
 ```
 
