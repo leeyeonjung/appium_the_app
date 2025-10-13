@@ -13,14 +13,14 @@ log = logging.getLogger(__name__)
 # 📱 Device Configuration
 devices = [
     # AWS EC2에 Docker로 기동된 Appium Server와 연결하여 사용
-    pytest.param(
-        {"udid": "localhost:5555", "systemPort": 8200, "server_url": "http://43.201.251.15:4723"},
-        id="localhost:5555"
-    ),
+    # pytest.param(
+    #     {"udid": "localhost:5555", "systemPort": 8200, "server_url": "http://43.201.251.15:4723"},
+    #     id="localhost:5555"
+    # ),
     # Local에 Service로 기동된 Appium Server 사용
     pytest.param(
-        {"udid": "emulator-5556", "systemPort": 8201, "server_url": "http://127.0.0.1:4725"},
-        id="emulator-5556"
+        {"udid": "emulator-5554", "systemPort": 8200, "server_url": "http://127.0.0.1:4723"},
+        id="emulator-5554"
     ),
 ]
 
