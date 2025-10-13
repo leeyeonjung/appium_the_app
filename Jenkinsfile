@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'windows' }
 
     triggers {
         // ✅ GitHub Webhook으로 push 이벤트 감지
