@@ -19,7 +19,7 @@ devices = [
     ),
     # Device 2
     pytest.param(
-        {"udid": "emulator-5554", "systemPort": 8200, "server_url": "http://127.0.0.1:4725"},
+        {"udid": "emulator-5554", "systemPort": 8201, "server_url": "http://127.0.0.1:4725"},
         id="emulator-5554"
     ),
 ]
