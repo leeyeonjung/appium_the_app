@@ -41,7 +41,7 @@ def test_photo(wd):
     device_id = str(raw_device_id).replace(":", "_").replace("/", "_").replace("\\", "_")
 
     # 캡쳐 이미지 저장 경로 정의
-    save_dir = BASE_DIR / "Result" / "📸image📸" / device_id / "test_photo"
+    save_dir = BASE_DIR / "Result" / "image" / device_id / "test_photo"
     save_dir.mkdir(parents=True, exist_ok=True)
 
     # Photo Demo 화면 진입
@@ -153,7 +153,7 @@ def test_image_text(wd):
     device_id = str(raw_device_id).replace(":", "_").replace("/", "_").replace("\\", "_")
 
     # 캡쳐 이미지 저장 경로 정의
-    save_dir = BASE_DIR / "Result" / "📸image📸" / device_id / "test_image_text"
+    save_dir = BASE_DIR / "Result" / "image" / device_id / "test_image_text"
     save_dir.mkdir(parents=True, exist_ok=True)
 
     # Photo Demo 진입
@@ -273,7 +273,7 @@ def test_image_text(wd):
             break
 
     expected_count = len(expected_texts)
-    log.info(f"📸 Captured {len(captured)} images, verified {matched_count}")
+    log.info(f"Captured {len(captured)} images, verified {matched_count}")
     # Assertion: 실제 확인 된 image가 6개임
     check.equal(len(verified_texts), expected_count,
                 f"[VERIFY FAIL] Only {len(verified_texts)}/{expected_count} verified")
