@@ -58,12 +58,10 @@ appium_the_app/
 ### 1️⃣ **Appium 자동화 테스트**
 - Appium에서 공식 제공하는 *The App* 일부 기능을 테스트 대상으로 선정  
 - 각 화면 진입 및 UI 요소 검증 자동화  
-- foldable / standard 디바이스 해상도에 대응  
 
 ### 2️⃣ **Pytest 기반 모듈화 구조**
 - `conftest.py`에서 **driver fixture**를 관리  
-- 각 기능별 테스트는 독립 실행 가능 (`pytest -k "photo_demo"`)  
-- `common_util` 모듈에서 Element 제어 / 이미지 비교 / 로깅 기능 통합 관리  
+- 각 기능별 테스트는 독립 실행 가능 (e.g: `pytest /tests/testcase/test_2_login_screen.py::test_into_login_screen`)   
 
 ### 3️⃣ **HTML Report & Video Recording**
 - 실행 시 자동으로 HTML 리포트 생성  
@@ -86,7 +84,7 @@ appium_the_app/
 
 ### ▶️ 로컬 실행
 ```bash
-pip install -r requirements.txt
+pip install -r /tests/requirements.txt
 pytest
 ```
 
@@ -97,9 +95,8 @@ docker compose up -d
 ```
 
 ### ▶️ Jenkins 원격 실행 (AWS EC2)
-- AWS EC2에 구축된 Jenkins에서 **Windows 로컬 테스트 환경을 원격으로 제어**하여 테스트를 실행  
-- Jenkins 파이프라인 또는 빌드 단계에서 원격 명령(`pytest -v --maxfail=1 --disable-warnings`)을 전송해 테스트 수행  
-- 테스트 결과(HTML Report 및 동영상)는 **Windows 로컬 환경의 `tests/Result/` 폴더**에 자동 저장  
+- AWS EC2에 구축된 Jenkins에서 **Windows 로컬 테스트 환경을 원격으로 제어**하여 테스트를 실행 
+- 테스트 결과(HTML Report 및 동영상)는 실행환경의 `tests/Result/` 폴더에 자동 저장  
 - Jenkins 콘솔 로그를 통해 테스트 진행 상황과 결과 요약을 실시간으로 확인 가능
 
 ---
