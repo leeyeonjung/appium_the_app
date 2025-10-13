@@ -1,12 +1,40 @@
 pipeline {
-    agent { label 'windows' }
+    agent any
+
+    triggers {
+        // ✅ GitHub Webhook으로 push 이벤트 감지
+        githubPush()
+    }
 
     stages {
-        stage('Run Pytest') {
+        stage('Checkout Test Code') {
             steps {
+                echo "📦 Checking out appium_the_app repository..."
+                git branch: 'main',
+                    url: 'https://github.com/leeyeonjung/appium_the_app.git'
+            }
+        }
+
+        stage('Run Pytest on Windows') {
+            steps {
+                echo "🚀 Running tests on Windows..."
                 bat '''
-                    cd C:\\appium_the_app
-                    pytest -v --disable-warnings
+                cd C:\\appium_the_app
+                pytest -v --maxfail=1 --disable-warnings
+                '''
+            }
+        }
+
+        stage('Collect Latest Report') {
+            steps {
+                echo "📊 Collecting latest HTML report..."
+                bat '''
+                set "REPORT_DIR=C:\\appium_the_app\\tests\\Result\\📊test-reports📊"
+                for /f "delims=" %%a in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html"') do (
+                    copy "%REPORT_DIR%\\%%a" "%WORKSPACE%\\latest_report.html"
+                    goto done
+                )
+                :done
                 '''
             }
         }
@@ -14,36 +42,8 @@ pipeline {
 
     post {
         always {
-            // 🔍 최신 HTML 리포트 찾기
-            script {
-                // PowerShell로 가장 최근 HTML 파일 경로 가져오기
-                def latestReport = bat(
-                    script: '''
-                        $folder = "C:\\appium_the_app\\tests\\Result\\📊test-reports📊"
-                        $latest = Get-ChildItem -Path $folder -Filter *.html | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-                        Write-Host $latest.FullName
-                    ''',
-                    returnStdout: true
-                ).trim()
-
-                // Jenkins용 경로 변환 (역슬래시 → 슬래시)
-                latestReport = latestReport.replace("\\", "/")
-
-                echo "📄 Latest HTML report: ${latestReport}"
-
-                // reportDir / reportFiles 분리
-                def reportDir  = latestReport.substring(0, latestReport.lastIndexOf("/"))
-                def reportFile = latestReport.substring(latestReport.lastIndexOf("/") + 1)
-
-                publishHTML([
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: reportDir,
-                    reportFiles: reportFile,
-                    reportName: 'Latest Pytest Report'
-                ])
-            }
+            echo "📤 Archiving latest HTML report to Jenkins..."
+            archiveArtifacts artifacts: 'latest_report.html', onlyIfSuccessful: false
         }
     }
 }
