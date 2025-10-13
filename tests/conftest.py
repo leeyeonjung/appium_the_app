@@ -12,14 +12,14 @@ log = logging.getLogger(__name__)
 
 # 📱 Device Configuration
 devices = [
-    # AWS EC2에 Docker로 기동된 Appium Server와 연결하여 사용
-    # pytest.param(
-    #     {"udid": "localhost:5555", "systemPort": 8200, "server_url": "http://43.201.251.15:4723"},
-    #     id="localhost:5555"
-    # ),
-    # Local에 Service로 기동된 Appium Server 사용
+    # Device 1
     pytest.param(
-        {"udid": "emulator-5554", "systemPort": 8200, "server_url": "http://127.0.0.1:4723"},
+        {"udid": "emulator-5556", "systemPort": 8200, "server_url": "http://127.0.0.1:4723"},
+        id="emulator-5556"
+    ),
+    # Device 2
+    pytest.param(
+        {"udid": "emulator-5554", "systemPort": 8200, "server_url": "http://127.0.0.1:4725"},
         id="emulator-5554"
     ),
 ]
@@ -54,8 +54,8 @@ def record_video(request, wd):
     raw_device_id = wd.capabilities.get("udid") or wd.capabilities.get("deviceUDID") or "unknown_device"
     device_id = str(raw_device_id).replace(":", "_").replace("/", "_").replace("\\", "_")
 
-    # === Result/🎥video-reports🎥/{device_id}/{테스트 파일명}/ ===
-    save_dir = Path(__file__).resolve().parents[0] / "Result" / "🎥video-reports🎥" / device_id / file_name
+    # === Result/video-reports/{device_id}/{테스트 파일명}/ ===
+    save_dir = Path(__file__).resolve().parents[0] / "Result" / "video-reports" / device_id / file_name
     os.makedirs(save_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -78,7 +78,7 @@ def record_video(request, wd):
 def pytest_configure(config):
     # --html 옵션 없어도 자동으로 생성
     if not getattr(config.option, "htmlpath", None):
-        report_dir = Path(__file__).resolve().parents[0] / "Result" / "📊test-reports📊"
+        report_dir = Path(__file__).resolve().parents[0] / "Result" / "test-reports"
         report_dir.mkdir(parents=True, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
