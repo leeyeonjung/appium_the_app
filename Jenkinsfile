@@ -97,16 +97,6 @@ pipeline {
 
                 echo "📤 Archiving latest HTML report to Jenkins..."
                 archiveArtifacts artifacts: '*.html', onlyIfSuccessful: false
-
-                // ✅ HTML Publisher Plugin - Jenkins 탭에 바로 표시
-                publishHTML(target: [
-                    reportName: '📈 Appium Test Report',
-                    reportDir: '.',
-                    reportFiles: '*.html',
-                    keepAll: true,
-                    alwaysLinkToLastBuild: true,
-                    allowMissing: false
-                ])
             }
         }
     }
