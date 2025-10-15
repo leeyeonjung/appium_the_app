@@ -14,7 +14,6 @@ pipeline {
             steps {
                 echo "🟡 No changes in jenkins_test_repo → Skipping test execution."
                 script {
-                    // ✅ 파이프라인 중단 (이후 stage 및 post 실행 안 함)
                     currentBuild.result = 'ABORTED'
                     echo "🛑 Pipeline stopped: No test changes detected."
                     error("Stop remaining stages due to no changes.")
@@ -42,7 +41,6 @@ pipeline {
             }
             steps {
                 echo "🚀 Detected changes in jenkins_test_repo → Running tests..."
-                // ⚠️ pytest 실패해도 파이프라인 계속 진행
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     bat '''
                         cd C:\\appium_the_app
@@ -56,19 +54,16 @@ pipeline {
     post {
         always {
             script {
-                // ✅ Skip(ABORTED) 상태면 post 블록 내용 실행 안 함
+                // ✅ Skip(ABORTED) 상태면 post 블록 실행하지 않음
                 if (currentBuild.result == 'ABORTED') {
                     echo "⏩ Post block skipped (build was aborted)."
                     return
                 }
 
-                echo "📊 Collecting latest HTML report (always, even if failed)..."
+                echo "📊 Collecting latest HTML report..."
 
+                // ✅ 최신 HTML 1개만 Jenkins 워크스페이스로 복사 (파일명 변경 없음)
                 bat '''
-                    REM ============================================
-                    REM 📊 최신 HTML 리포트 1개만 Jenkins로 복사
-                    REM ============================================
-
                     setlocal enabledelayedexpansion
                     set "REPORT_DIR=C:\\appium_the_app\\tests\\Result\\test-reports"
                     set "LATEST="
@@ -78,6 +73,7 @@ pipeline {
                         exit /b 0
                     )
 
+                    REM 최신순으로 정렬 후 첫 번째(가장 최근) 파일만 선택
                     for /f "delims=" %%A in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html" 2^>nul') do (
                         set "LATEST=%%A"
                         goto :found
@@ -95,8 +91,8 @@ pipeline {
                     endlocal
                 '''
 
-                echo "📤 Archiving latest HTML report to Jenkins..."
-                archiveArtifacts artifacts: '*.html', onlyIfSuccessful: false
+                echo "📤 Archiving only the latest HTML report..."
+                archiveArtifacts artifacts: '*.html', fingerprint: true, onlyIfSuccessful: false
             }
         }
     }
