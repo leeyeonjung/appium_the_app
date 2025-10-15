@@ -8,9 +8,12 @@ pipeline {
     stages {
         stage('Checkout Test Code') {
             steps {
-                echo "📦 Checking out appium_the_app repository..."
-                git branch: 'main',
-                    url: 'https://github.com/leeyeonjung/appium_the_app.git'
+                echo "📦 Updating local appium_the_app repository..."
+                bat '''
+                cd C:\\appium_the_app
+                git fetch origin main
+                git reset --hard origin/main
+                '''
             }
         }
 
