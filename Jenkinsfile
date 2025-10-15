@@ -1,8 +1,8 @@
 pipeline {
-    agent { label 'windows' }   // ✅ Windows Agent에서 실행
+    agent { label 'windows' }
 
     triggers {
-        githubPush()            // ✅ GitHub Webhook으로 push 시 자동 실행
+        githubPush()   // ✅ GitHub webhook push 시 자동 실행
     }
 
     stages {
@@ -18,8 +18,11 @@ pipeline {
         }
 
         stage('Run Pytest on Windows') {
+            when {
+                changeset pattern: "jenkins_test_repo/**", comparator: "ANT"
+            }
             steps {
-                echo "🚀 Running tests on Windows..."
+                echo "🚀 Detected changes in jenkins_test_repo → Running tests..."
                 bat '''
                 cd C:\\appium_the_app
                 pytest -v --maxfail=1 --disable-warnings
@@ -27,7 +30,19 @@ pipeline {
             }
         }
 
+        stage('Skip Info') {
+            when {
+                not { changeset pattern: "jenkins_test_repo/**", comparator: "ANT" }
+            }
+            steps {
+                echo "🟡 No changes in jenkins_test_repo → Skipping test execution."
+            }
+        }
+
         stage('Collect Latest Report') {
+            when {
+                changeset pattern: "jenkins_test_repo/**", comparator: "ANT"
+            }
             steps {
                 echo "📊 Collecting latest HTML report..."
                 bat '''
@@ -36,27 +51,23 @@ pipeline {
                 REM ============================================
 
                 setlocal enabledelayedexpansion
-
-                REM 📁 HTML 리포트 폴더 (이모지 포함)
                 set "REPORT_DIR=C:\\appium_the_app\\tests\\Result\\test-reports"
+                set "LATEST="
 
-                REM 최신 HTML 파일 1개 찾기
-                for /f "delims=" %%a in ('dir /b /a-d /o-d "!REPORT_DIR!\\*.html"') do (
-                    set "LATEST=%%a"
-                    goto found
+                for /f "delims=" %%A in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html"') do (
+                    set "LATEST=%%A"
+                    goto :found
                 )
-                :found
 
+                :found
                 if not defined LATEST (
-                    echo ❌ No HTML report found in "!REPORT_DIR!"
+                    echo ❌ No HTML report found in "%REPORT_DIR%"
                     exit /b 1
                 )
 
                 echo ✅ Found latest report: !LATEST!
-                echo Copying to workspace...
-                copy "!REPORT_DIR!\\!LATEST!" "%WORKSPACE%\\!LATEST!" >nul
-                echo ✅ Copied "!LATEST!" to Jenkins workspace.
-
+                copy "%REPORT_DIR%\\!LATEST!" "%WORKSPACE%\\!LATEST!" >nul
+                echo ✅ Copied !LATEST! to Jenkins workspace.
                 endlocal
                 '''
             }
