@@ -118,8 +118,8 @@ appium_the_app/
 | 항목 | 정보 |
 |------|------|
 | **Jenkins URL** | 🔗 [http://3.36.219.242:8080](http://3.36.219.242:8080) |
-| **User ID** | `admin` |
-| **Password** | `admin` |
+| **User ID** | `test` |
+| **Password** | `test` |
 | **Trigger** | GitHub Push 이벤트 기반 (테스트 전용 repo와 연동) |
 | **Execution Flow** | Jenkins → Remote Windows (pytest 실행) → 로컬 환경에서 생성된 HTML Report 수집 → Jenkins에서 표시 |
 
