@@ -34,8 +34,8 @@ Appium에서 공식 배포하는 샘플 앱 **“The App”** 의 주요 기능�
 ### 4️⃣ **CI 환경 (Jenkins + AWS + 로컬 테스트 실행)**
 - AWS EC2(Ubuntu)에 **Jenkins를 구축**하여 테스트를 원격 제어하도록 구성했습니다.  
 - Jenkins는 **명령 제어 역할**을 수행하며,  
-  특정 저장소의 변경사항이 webhook을 통해 감지되면  
-  이를 기반으로 **별도 저장소의 테스트 코드를 사용해 Windows 로컬 환경에서 실제 테스트를 실행**합니다.  
+  저장소의 변경사항이 webhook을 통해 감지되면  
+  이를 기반으로 **테스트 코드를 사용해 Windows 로컬 환경에서 실제 테스트를 실행**합니다.  
 - 로컬 PC에는 **Appium Server, Android Emulator, Pytest 환경**이 구성되어 있으며,  
   Jenkins에서 원격 명령으로 pytest를 실행해 테스트를 수행합니다.  
 - 테스트 결과(HTML Report 및 동영상)는 로컬 환경의 `tests/Result/test-reports` 폴더에 자동 생성되며,  
@@ -120,11 +120,8 @@ appium_the_app/
 | **Jenkins URL** | 🔗 [http://3.36.219.242:8080](http://3.36.219.242:8080) |
 | **User ID** | `guest` |
 | **Password** | `guest` |
-| **Trigger** | GitHub Push 이벤트 기반 (테스트 전용 repo와 연동) |
+| **Trigger** | GitHub Push 이벤트 기반|
 | **Execution Flow** | Jenkins → Remote Windows (pytest 실행) → 로컬 환경에서 생성된 HTML Report 수집 → Jenkins에서 표시 |
-
-📦 Jenkinsfile은 참고용으로 본 Repository 에도 포함되어 있으나, 실제 파이프라인은 트리거 역할을 하는 테스트 전용 저장소에서 실행됩니다.
-두 저장소의 Jenkinsfile은 동일한 내용으로 작성되어 있습니다.
 
 ---
 
