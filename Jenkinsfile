@@ -14,8 +14,8 @@ pipeline {
             steps {
                 echo "🟡 No changes in jenkins_test_repo → Skipping test execution."
                 script {
-                    // ✅ 변경 없을 경우 파이프라인 즉시 종료
-                    currentBuild.result = 'SUCCESS'
+                    // ✅ 파이프라인 중단 (이후 stage 및 post 실행 안 함)
+                    currentBuild.result = 'ABORTED'
                     echo "🛑 Pipeline stopped: No test changes detected."
                     error("Stop remaining stages due to no changes.")
                 }
@@ -42,7 +42,7 @@ pipeline {
             }
             steps {
                 echo "🚀 Detected changes in jenkins_test_repo → Running tests..."
-                // ⚠️ pytest 실패해도 이후 단계 계속 진행
+                // ⚠️ pytest 실패해도 파이프라인 계속 진행
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                     bat '''
                         cd C:\\appium_the_app
@@ -55,6 +55,11 @@ pipeline {
 
     post {
         always {
+            // ✅ Skip(ABORTED)일 때는 post 블록도 건너뜀
+            when {
+                expression { currentBuild.result != 'ABORTED' }
+            }
+
             echo "📊 Collecting latest HTML report (always, even if failed)..."
             bat '''
                 REM ============================================
@@ -65,15 +70,20 @@ pipeline {
                 set "REPORT_DIR=C:\\appium_the_app\\tests\\Result\\test-reports"
                 set "LATEST="
 
-                for /f "delims=" %%A in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html"') do (
+                if not exist "%REPORT_DIR%" (
+                    echo ⚠️ Report directory not found: "%REPORT_DIR%"
+                    exit /b 0
+                )
+
+                for /f "delims=" %%A in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html" 2^>nul') do (
                     set "LATEST=%%A"
                     goto :found
                 )
 
                 :found
                 if not defined LATEST (
-                    echo ❌ No HTML report found in "%REPORT_DIR%"
-                    exit /b 1
+                    echo ⚠️ No HTML report found in "%REPORT_DIR%"
+                    exit /b 0
                 )
 
                 echo ✅ Found latest report: !LATEST!
