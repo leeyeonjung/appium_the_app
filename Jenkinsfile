@@ -55,55 +55,59 @@ pipeline {
 
     post {
         always {
-            // ✅ Skip(ABORTED)일 때는 post 블록도 건너뜀
-            when {
-                expression { currentBuild.result != 'ABORTED' }
+            script {
+                // ✅ Skip(ABORTED) 상태면 post 블록 내용 실행 안 함
+                if (currentBuild.result == 'ABORTED') {
+                    echo "⏩ Post block skipped (build was aborted)."
+                    return
+                }
+
+                echo "📊 Collecting latest HTML report (always, even if failed)..."
+
+                bat '''
+                    REM ============================================
+                    REM 📊 최신 HTML 리포트 1개만 Jenkins로 복사
+                    REM ============================================
+
+                    setlocal enabledelayedexpansion
+                    set "REPORT_DIR=C:\\appium_the_app\\tests\\Result\\test-reports"
+                    set "LATEST="
+
+                    if not exist "%REPORT_DIR%" (
+                        echo ⚠️ Report directory not found: "%REPORT_DIR%"
+                        exit /b 0
+                    )
+
+                    for /f "delims=" %%A in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html" 2^>nul') do (
+                        set "LATEST=%%A"
+                        goto :found
+                    )
+
+                    :found
+                    if not defined LATEST (
+                        echo ⚠️ No HTML report found in "%REPORT_DIR%"
+                        exit /b 0
+                    )
+
+                    echo ✅ Found latest report: !LATEST!
+                    copy "%REPORT_DIR%\\!LATEST!" "%WORKSPACE%\\!LATEST!" >nul
+                    echo ✅ Copied !LATEST! to Jenkins workspace.
+                    endlocal
+                '''
+
+                echo "📤 Archiving latest HTML report to Jenkins..."
+                archiveArtifacts artifacts: '*.html', onlyIfSuccessful: false
+
+                // ✅ HTML Publisher Plugin - Jenkins 탭에 바로 표시
+                publishHTML(target: [
+                    reportName: '📈 Appium Test Report',
+                    reportDir: '.',
+                    reportFiles: '*.html',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: false
+                ])
             }
-
-            echo "📊 Collecting latest HTML report (always, even if failed)..."
-            bat '''
-                REM ============================================
-                REM 📊 최신 HTML 리포트 1개만 Jenkins로 복사
-                REM ============================================
-
-                setlocal enabledelayedexpansion
-                set "REPORT_DIR=C:\\appium_the_app\\tests\\Result\\test-reports"
-                set "LATEST="
-
-                if not exist "%REPORT_DIR%" (
-                    echo ⚠️ Report directory not found: "%REPORT_DIR%"
-                    exit /b 0
-                )
-
-                for /f "delims=" %%A in ('dir /b /a-d /o-d "%REPORT_DIR%\\*.html" 2^>nul') do (
-                    set "LATEST=%%A"
-                    goto :found
-                )
-
-                :found
-                if not defined LATEST (
-                    echo ⚠️ No HTML report found in "%REPORT_DIR%"
-                    exit /b 0
-                )
-
-                echo ✅ Found latest report: !LATEST!
-                copy "%REPORT_DIR%\\!LATEST!" "%WORKSPACE%\\!LATEST!" >nul
-                echo ✅ Copied !LATEST! to Jenkins workspace.
-                endlocal
-            '''
-
-            echo "📤 Archiving latest HTML report to Jenkins..."
-            archiveArtifacts artifacts: '*.html', onlyIfSuccessful: false
-
-            // ✅ HTML Publisher Plugin - Jenkins 탭에 바로 표시
-            publishHTML(target: [
-                reportName: '📈 Appium Test Report',
-                reportDir: '.',
-                reportFiles: '*.html',
-                keepAll: true,
-                alwaysLinkToLastBuild: true,
-                allowMissing: false
-            ])
         }
     }
 }
