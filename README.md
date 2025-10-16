@@ -76,6 +76,9 @@ appium_the_app/
 │   ├── docker-compose.yml                       # Appium Server Docker 환경 정의 파일
 │   └── entrypoint.sh                            # Appium Server 컨테이너 초기화 스크립트
 │
+├── jenkins_test_repo/                           # Jenkins 파이프라인 트리거용 테스트 리포지토리
+│   └── testfile.txt                             # 변경 감지를 위한 예시 파일 (파이프라인 실행 트리거 용도)
+│
 ├── testcase_excel/                              
 │   └── (Testcase)The_App.xlsm                   # 테스트 시나리오별 테스트 케이스 문서
 │
@@ -119,7 +122,7 @@ appium_the_app/
 │
 ├── requirements.txt                             # 테스트 환경 의존성 정의 파일
 │
-├── Jenkinsfile                                  # Jenkins Pipeline Groovy 스크립트
+├── Jenkinsfile                                  # Jenkins Pipeline 스크립트
 │
 └── README.md                                    # 프로젝트 개요, 구조, 실행 방법 등 문서
 ```
