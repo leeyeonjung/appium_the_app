@@ -168,10 +168,10 @@ pytest -v
 pytest -v tests/testcase/test_2_login_screen.py
 ```
 
-### 4️⃣ 결과 확인
-- 📊 **HTML Report:** `[tests/Result/test-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/video-reports)`
-- 🎥 **Video Report:** `[tests/Result/video-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/test-reports)`  
-- 🖼️ **Image:** `[tests/Result/image/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/image)` 
+### 4️⃣ 결과 확인 (링크 클릭시, 해당 Repo의 아래 경로로 이동합니다.)
+- 📊 **HTML Report:** [tests/Result/test-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/test-reports)
+- 🎥 **Video Report:** [tests/Result/video-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/video-reports)  
+- 🖼️ **Image:** [tests/Result/image/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/image)
 
 ---
 
