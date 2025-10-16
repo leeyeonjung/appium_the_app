@@ -18,7 +18,7 @@ pipeline {
                 }
             }
         }
-/*
+
         stage('Checkout Test Code') {
             steps {
                 echo "📦 Updating local appium_the_app repository..."
@@ -29,13 +29,13 @@ pipeline {
                 '''
             }
         }
-*/
+
         stage('Run Pytest on Windows') {
             steps {
                 echo "🚀 Running pytest..."
                 bat '''
                     cd C:\\appium_the_app
-                    pytest -v --maxfail=1 --disable-warnings
+                    pytest -v C:\\appium_the_app\\tests\\testcase\\test_0_app_start.py --maxfail=1 --disable-warnings
                 '''
             }
         }
