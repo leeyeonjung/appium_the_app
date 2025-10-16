@@ -122,7 +122,7 @@ appium_the_app/
 | **Password** | `guest` |
 | **Trigger** | GitHub Push 이벤트 기반|
 | **Execution Flow** | Jenkins → Remote Windows (pytest 실행) → 로컬 환경에서 생성된 HTML Report 수집 → Jenkins에서 표시 |
-
+| **Video** | [![동영상 보기](https://img.youtube.com/vi/CAtjUNTUvNA/0.jpg)](https://www.youtube.com/watch?v=CAtjUNTUvNA)
 ---
 
 ## ▶️ Run Locally
