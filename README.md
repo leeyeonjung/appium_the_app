@@ -124,7 +124,8 @@ appium_the_app/
 | **Execution Flow** | Jenkins → Remote Windows (pytest 실행) → 로컬 환경에서 생성된 HTML Report 수집 → Jenkins에서 표시 |
 
 **🎬 Jenkins Demo**
-<video src="https://github.com/leeyeonjung/appium_the_app/raw/main/Demo/test_jenkins.mp4"
+
+<video src="https://raw.githubusercontent.com/leeyeonjung/appium_the_app/main/Demo/test_jenkins.mp4"
        width="600" controls muted loop></video>
 
 ---
