@@ -1,4 +1,5 @@
 # 📱 Appium Automated Test Project – *The App*
+---
 
 ## 🧩 Overview
 이 프로젝트는 **Appium, Python, Pytest**를 이용하여  
@@ -9,6 +10,17 @@ Appium에서 공식 배포하는 샘플 앱 **“The App”** 의 주요 기능�
 - AWS EC2 환경에 **Jenkins CI 서버를 직접 구축**하여  
   **로컬(Windows) 테스트 환경을 원격으로 제어 및 실행**할 수 있도록 구성했습니다.  
   (Appium Server, Emulator, Pytest 환경은 Windows PC에서 구동되며, Jenkins는 원격 실행을 담당)
+
+---
+
+## 📊 Test Report Example
+(아래 링크를 클릭하면, 해당 리포지토리의 `tests/Result/test-reports` 경로에 있는 HTML 파일이 렌더링됩니다.)
+
+[🔗 View Full HTML Report](https://htmlpreview.github.io/?https://github.com/leeyeonjung/appium_the_app/blob/main/tests/Result/test-reports/report_2025-10-16_15-27-03.html)<br><br>
+
+<p align="center">
+  <img width="600" alt="HTML Report Screenshot" src="https://github.com/user-attachments/assets/6f1b3fc7-b3a3-4739-8070-a269c46f4a13" />
+</p>
 
 ---
 
@@ -64,6 +76,9 @@ appium_the_app/
 │   ├── docker-compose.yml                       # Appium Server Docker 환경 정의 파일
 │   └── entrypoint.sh                            # Appium Server 컨테이너 초기화 스크립트
 │
+├── jenkins_test_repo/                           # Jenkins 파이프라인 트리거용 테스트 리포지토리
+│   └── testfile.txt                             # 변경 감지를 위한 예시 파일 (파이프라인 실행 트리거 용도)
+│
 ├── testcase_excel/                              
 │   └── (Testcase)The_App.xlsm                   # 테스트 시나리오별 테스트 케이스 문서
 │
@@ -107,7 +122,7 @@ appium_the_app/
 │
 ├── requirements.txt                             # 테스트 환경 의존성 정의 파일
 │
-├── Jenkinsfile                                  # Jenkins Pipeline Groovy 스크립트
+├── Jenkinsfile                                  # Jenkins Pipeline 스크립트
 │
 └── README.md                                    # 프로젝트 개요, 구조, 실행 방법 등 문서
 ```
@@ -123,10 +138,14 @@ appium_the_app/
 | **Trigger** | GitHub Push 이벤트를 감지하여, jenkins_test_repo 디렉터리 및 하위 파일에 변경이 발생하면 테스트 코드 실행이 자동으로 트리거 |
 | **Execution Flow** | Jenkins → Remote Windows (pytest 실행) → 로컬 환경에서 생성된 HTML Report 수집 → Jenkins에서 표시 |
 
-**🎬 Jenkins Demo**
+### 🎥 Jenkins Test Demo
 
-<video src="https://raw.githubusercontent.com/leeyeonjung/appium_the_app/main/Demo/test_jenkins.mp4"
-       width="600" controls muted loop></video>
+<video src="https://private-user-images.githubusercontent.com/121649224/501879285-89a6745e-67ec-40ea-93cc-23c8e092face.mp4?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA1OTk4NTMsIm5iZiI6MTc2MDU5OTU1MywicGF0aCI6Ii8xMjE2NDkyMjQvNTAxODc5Mjg1LTg5YTY3NDVlLTY3ZWMtNDBlYS05M2NjLTIzYzhlMDkyZmFjZS5tcDQ_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUxMDE2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MTAxNlQwNzI1NTNaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1hOTM4OWUyMGZmNTVlNWI1NGNhNTEzZjYwZDYwZWRiZWQxNjJhMWI2Y2YxZTM0ZDI3Y2I4ZGUzNzhlMTRhODg5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.fu9RpOSsIqDZrUIixgMfwHunYgW9pX0I0Paok4OK8yw"
+       controls
+       width="450"
+       playsinline
+       muted>
+</video>
 
 ---
 
@@ -154,9 +173,10 @@ pytest -v tests/testcase/test_2_login_screen.py
 ```
 
 ### 4️⃣ 결과 확인
-- 📊 **HTML Report:** `tests/Result/test-reports/`  
-- 🎥 **Video Report:** `tests/Result/video-reports/`  
-- 🖼️ **Image:** `tests/Result/image/`
+(아래 링크를 클릭하면, 해당 리포지토리의 아래 경로로 이동합니다.)
+- 📊 **HTML Report:** [tests/Result/test-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/test-reports)
+- 🎥 **Video Report:** [tests/Result/video-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/video-reports)  
+- 🖼️ **Image:** [tests/Result/image/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/image)
 
 ---
 
