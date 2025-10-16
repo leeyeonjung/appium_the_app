@@ -6,25 +6,20 @@ pipeline {
     }
 
     stages {
-
         stage('Skip Info') {
             when {
                 not { changeset pattern: "jenkins_test_repo/**", comparator: "ANT" }
             }
             steps {
-                echo "🟡 No changes in jenkins_test_repo → Skipping test execution."
+                echo "🟡 No changes → Skipping test execution."
                 script {
                     currentBuild.result = 'ABORTED'
-                    echo "🛑 Pipeline stopped: No test changes detected."
                     error("Stop remaining stages due to no changes.")
                 }
             }
         }
-
+/*
         stage('Checkout Test Code') {
-            when {
-                changeset pattern: "jenkins_test_repo/**", comparator: "ANT"
-            }
             steps {
                 echo "📦 Updating local appium_the_app repository..."
                 bat '''
@@ -34,21 +29,17 @@ pipeline {
                 '''
             }
         }
-
+*/
         stage('Run Pytest on Windows') {
-            when {
-                changeset pattern: "jenkins_test_repo/**", comparator: "ANT"
-            }
             steps {
-                echo "🚀 Detected changes in jenkins_test_repo → Running tests..."
-                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    bat '''
-                        cd C:\\appium_the_app
-                        pytest -v --maxfail=1 --disable-warnings
-                    '''
-                }
+                echo "🚀 Running pytest..."
+                bat '''
+                    cd C:\\appium_the_app
+                    pytest -v --maxfail=1 --disable-warnings
+                '''
             }
         }
+
     }
 
     post {
