@@ -14,6 +14,7 @@ Appium에서 공식 배포하는 샘플 앱 **“The App”** 의 주요 기능�
 ---
 
 ## 📊 Test Report Example
+(아래 링크를 클릭하면, 해당 리포지토리의 `tests/Result/test-reports` 경로에 있는 HTML 파일이 렌더링됩니다.)
 
 [🔗 View Full HTML Report](https://htmlpreview.github.io/?https://github.com/leeyeonjung/appium_the_app/blob/main/tests/Result/test-reports/report_2025-10-16_15-27-03.html)<br><br>
 
@@ -168,7 +169,8 @@ pytest -v
 pytest -v tests/testcase/test_2_login_screen.py
 ```
 
-### 4️⃣ 결과 확인 (링크 클릭시, 해당 Repo의 아래 경로로 이동합니다.)
+### 4️⃣ 결과 확인
+(아래 링크를 클릭하면, 해당 리포지토리의 아래 경로로 이동합니다.)
 - 📊 **HTML Report:** [tests/Result/test-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/test-reports)
 - 🎥 **Video Report:** [tests/Result/video-reports/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/video-reports)  
 - 🖼️ **Image:** [tests/Result/image/](https://github.com/leeyeonjung/appium_the_app/tree/main/tests/Result/image)
