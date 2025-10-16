@@ -18,7 +18,7 @@ pipeline {
                 }
             }
         }
-
+/*
         stage('Checkout Test Code') {
             steps {
                 echo "📦 Updating local appium_the_app repository..."
@@ -29,7 +29,7 @@ pipeline {
                 '''
             }
         }
-
+*/
         stage('Run Pytest on Windows') {
             steps {
                 echo "🚀 Running pytest..."
