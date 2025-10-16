@@ -120,9 +120,13 @@ appium_the_app/
 | **Jenkins URL** | 🔗 [http://3.36.219.242:8080](http://3.36.219.242:8080) |
 | **User ID** | `guest` |
 | **Password** | `guest` |
-| **Trigger** | GitHub Push 이벤트 기반|
+| **Trigger** | GitHub Push 이벤트를 감지하여, jenkins_test_repo 디렉터리 및 하위 파일에 변경이 발생하면 테스트 코드 실행이 자동으로 트리거 |
 | **Execution Flow** | Jenkins → Remote Windows (pytest 실행) → 로컬 환경에서 생성된 HTML Report 수집 → Jenkins에서 표시 |
-| **Video** | [![동영상 보기](https://img.youtube.com/vi/CAtjUNTUvNA/0.jpg)](https://www.youtube.com/watch?v=CAtjUNTUvNA)
+
+**🎬 Jenkins Demo**
+<video src="https://github.com/leeyeonjung/appium_the_app/raw/main/Demo/test_jenkins.mp4"
+       width="600" controls muted loop></video>
+
 ---
 
 ## ▶️ Run Locally
