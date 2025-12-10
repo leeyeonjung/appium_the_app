@@ -1,6 +1,6 @@
 // Jenkinsfile.deploy - BUILD Job for Android APK (theapp_deploy)
 // Agent: linux_02
-// Purpose: Build Android APK and trigger test job
+// Purpose: Build Debug APK → Test → Build Release APK
 
 pipeline {
     agent { label 'linux_02' }
@@ -48,15 +48,13 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo '📦 Installing npm dependencies...'
-                sh '''
-                    npm install
-                '''
+                sh 'npm install'
             }
         }
         
         stage('Build Debug APK') {
             steps {
-                echo '🔨 Building Debug APK...'
+                echo '🔨 Building Debug APK for testing...'
                 dir('android') {
                     sh '''
                         chmod +x ./gradlew
@@ -66,47 +64,69 @@ pipeline {
             }
         }
         
+        stage('Verify Debug APK') {
+            steps {
+                echo '📱 Verifying Debug APK...'
+                sh '''
+                    ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+                '''
+            }
+        }
+        
+        stage('Archive Debug APK') {
+            steps {
+                echo '📦 Archiving Debug APK for testing...'
+                archiveArtifacts artifacts: 'android/app/build/outputs/apk/debug/app-debug.apk',
+                                 fingerprint: true,
+                                 allowEmptyArchive: false
+            }
+        }
+        
+        stage('Run Tests with Debug APK') {
+            steps {
+                echo '🧪 Triggering theapp_test with Debug APK...'
+                script {
+                    def testResult = build job: 'theapp_test',
+                                           parameters: [
+                                               string(name: 'APK_BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
+                                               string(name: 'APK_TYPE', value: 'debug')
+                                           ],
+                                           wait: true,  // ⭐ 테스트 완료까지 대기
+                                           propagate: true  // ⭐ 테스트 실패 시 이 job도 실패
+                    
+                    echo "✅ Tests passed with Debug APK!"
+                }
+            }
+        }
+        
         stage('Build Release APK') {
             steps {
-                echo '🔨 Building Release APK...'
+                echo '🚀 Tests passed! Building Release APK...'
                 dir('android') {
                     sh './gradlew assembleRelease'
                 }
             }
         }
         
-        stage('Verify APK Files') {
+        stage('Verify Release APK') {
             steps {
-                echo '📱 Verifying APK files...'
+                echo '📱 Verifying Release APK...'
                 sh '''
-                    echo "Debug APK:"
-                    ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+                    ls -lh android/app/build/outputs/apk/release/app-release.apk
                     
                     echo ""
-                    echo "Release APK:"
-                    ls -lh android/app/build/outputs/apk/release/app-release.apk
+                    echo "APK Info:"
+                    file android/app/build/outputs/apk/release/app-release.apk
                 '''
             }
         }
         
-        stage('Archive APK Artifacts') {
+        stage('Archive Release APK') {
             steps {
-                echo '📦 Archiving APK artifacts to Jenkins...'
-                archiveArtifacts artifacts: 'android/app/build/outputs/apk/**/*.apk',
+                echo '📦 Archiving Release APK (production-ready)...'
+                archiveArtifacts artifacts: 'android/app/build/outputs/apk/release/app-release.apk',
                                  fingerprint: true,
                                  allowEmptyArchive: false
-            }
-        }
-        
-        stage('Trigger Test Job') {
-            steps {
-                echo '🚀 Triggering theapp_test job on Windows agent...'
-                build job: 'theapp_test',
-                      parameters: [
-                          string(name: 'APK_BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
-                          string(name: 'APK_TYPE', value: 'release')
-                      ],
-                      wait: false
             }
         }
     }
@@ -114,12 +134,12 @@ pipeline {
     post {
         success {
             echo "✅ Build #${env.BUILD_NUMBER} completed successfully!"
-            echo "📦 APK artifacts are stored in Jenkins"
-            echo "🚀 Test job has been triggered"
+            echo "🧪 Debug APK tested and passed"
+            echo "📦 Release APK is ready for deployment"
         }
         failure {
-            echo '❌ Build failed!'
-            echo 'Check the console output for details'
+            echo '❌ Build or tests failed!'
+            echo 'Release APK was not created'
         }
         cleanup {
             echo '🧹 Cleaning workspace...'
