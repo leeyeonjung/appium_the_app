@@ -22,25 +22,10 @@ pipeline {
             steps {
                 echo '🔍 Verifying build environment...'
                 sh '''
-                    echo "ANDROID_HOME: $ANDROID_HOME"
-                    
-                    echo "Java version:"
                     java -version
-                    
-                    echo ""
-                    echo "Node.js version:"
                     node --version
-                    
-                    echo "npm version:"
-                    npm --version
-                    
-                    echo ""
-                    echo "Setting executable permissions for Android tools..."
                     chmod +x $ANDROID_HOME/platform-tools/* 2>/dev/null || true
                     chmod +x $ANDROID_HOME/build-tools/33.0.0/* 2>/dev/null || true
-                    
-                    echo "ADB version:"
-                    adb --version
                 '''
             }
         }
@@ -67,19 +52,13 @@ pipeline {
         stage('Verify Release APK') {
             steps {
                 echo '📱 Verifying Release APK...'
-                sh '''
-                    ls -lh android/app/build/outputs/apk/release/app-release.apk
-                    
-                    echo ""
-                    echo "APK Info:"
-                    file android/app/build/outputs/apk/release/app-release.apk
-                '''
+                sh 'ls -lh android/app/build/outputs/apk/release/app-release.apk'
             }
         }
         
         stage('Archive APK for Testing') {
             steps {
-                echo '📦 Archiving Release APK to pass to test job...'
+                echo '📦 Archiving Release APK...'
                 archiveArtifacts artifacts: 'android/app/build/outputs/apk/release/app-release.apk',
                                  fingerprint: true,
                                  allowEmptyArchive: false
@@ -88,11 +67,8 @@ pipeline {
         
         stage('Run Tests with Release APK') {
             steps {
-                echo '🧪 Running Appium tests with Release APK...'
+                echo '🧪 Running Appium tests...'
                 script {
-                    echo "Starting test job: theapp_test"
-                    echo "Test will use archived APK from this build #${env.BUILD_NUMBER}"
-                    
                     def testResult = build job: 'theapp_test',
                                            parameters: [
                                                string(name: 'APK_BUILD_NUMBER', value: "${env.BUILD_NUMBER}"),
@@ -101,9 +77,7 @@ pipeline {
                                            wait: true,
                                            propagate: true
                     
-                    echo "✅ Tests passed! theapp_test #${testResult.number} completed successfully"
-                    echo "📊 Test report: ${env.JENKINS_URL}job/theapp_test/${testResult.number}/"
-                    echo "📦 Release APK #${env.BUILD_NUMBER} is now verified and ready for production"
+                    echo "✅ Tests passed! Report: ${env.JENKINS_URL}job/theapp_test/${testResult.number}/"
                 }
             }
         }
@@ -111,16 +85,12 @@ pipeline {
     
     post {
         success {
-            echo "✅ Build #${env.BUILD_NUMBER} completed successfully!"
-            echo "🧪 Release APK tested and passed"
-            echo "📦 Release APK is ready for deployment"
+            echo "✅ Build #${env.BUILD_NUMBER} completed! Release APK is ready for deployment"
         }
         failure {
-            echo '❌ Build or tests failed!'
-            echo 'Check the console output for details'
+            echo '❌ Build or tests failed! Check console output for details'
         }
         cleanup {
-            echo '🧹 Cleaning workspace...'
             cleanWs()
         }
     }
