@@ -1,8 +1,12 @@
+// Jenkinsfile.deploy - BUILD Job for Android APK (theapp_deploy)
+// Agent: linux_02
+// Purpose: Build Android APK and trigger test job
+
 pipeline {
     agent { label 'linux_02' }
     
     environment {
-        ANDROID_HOME = '/root/android-sdk'
+        ANDROID_HOME = '/home/ubuntu/android-sdk'
         PATH = "${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/build-tools/33.0.0:${env.PATH}"
     }
     
@@ -19,9 +23,15 @@ pipeline {
                 echo '🔍 Verifying build environment...'
                 sh '''
                     echo "ANDROID_HOME: $ANDROID_HOME"
+                    
                     echo "Java version:"
                     java -version
+                    
                     echo ""
+                    echo "Setting executable permissions for Android tools..."
+                    chmod +x $ANDROID_HOME/platform-tools/* 2>/dev/null || true
+                    chmod +x $ANDROID_HOME/build-tools/33.0.0/* 2>/dev/null || true
+                    
                     echo "ADB version:"
                     adb --version
                 '''
@@ -101,4 +111,3 @@ pipeline {
         }
     }
 }
-
