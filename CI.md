@@ -1,5 +1,29 @@
 # Testing and CI
 
+---
+
+## ⚠️ 중요: 공식 출처 (IMPORTANT: Official Source)
+
+> **이 저장소의 모든 코드는 공식 출처에서 복사한 것입니다!**
+> 
+> **ALL CODE IN THIS REPOSITORY IS COPIED FROM THE OFFICIAL SOURCE!**
+
+### 📌 공식 출처 (Official Source):
+- **Repository**: [appium/appium-pro](https://github.com/appium/appium-pro) - The App
+- **Original Author**: Appium Pro Team
+- **License**: MIT License
+
+### ⚠️ 저작권 고지 (Copyright Notice):
+**Jenkinsfile을 제외한 모든 애플리케이션 코드(React Native 앱, 테스트 코드 등)는 위 공식 출처에서 그대로 복사해온 것입니다.**
+
+**ALL APPLICATION CODE (React Native app, test code, etc.) EXCEPT FOR `Jenkinsfile` IS DIRECTLY COPIED FROM THE OFFICIAL SOURCE ABOVE.**
+
+본 저장소는 TestApp 빌드 및 CI/CD 파이프라인 구성을 위한 목적으로 생성되었으며, **오직 `Jenkinsfile`만 자체 작성**되었습니다.
+
+This repository was created for the purpose of TestApp build and CI/CD pipeline configuration, and **ONLY the `Jenkinsfile` was written independently**.
+
+---
+
 This repo comes with an example of a test framework, a set of tests, and a set of scripts that
 enable the app to be built and tested on a pull request or a push to the repo. I've designed this
 (admittedly small, toy-size) framework to embody what I believe are current best practices for
