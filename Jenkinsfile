@@ -28,12 +28,28 @@ pipeline {
                     java -version
                     
                     echo ""
+                    echo "Node.js version:"
+                    node --version
+                    
+                    echo "npm version:"
+                    npm --version
+                    
+                    echo ""
                     echo "Setting executable permissions for Android tools..."
                     chmod +x $ANDROID_HOME/platform-tools/* 2>/dev/null || true
                     chmod +x $ANDROID_HOME/build-tools/33.0.0/* 2>/dev/null || true
                     
                     echo "ADB version:"
                     adb --version
+                '''
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                echo '📦 Installing npm dependencies...'
+                sh '''
+                    npm install
                 '''
             }
         }
