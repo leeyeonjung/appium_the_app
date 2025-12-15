@@ -5,7 +5,7 @@
 > **ALL CODE IN THIS REPOSITORY IS COPIED FROM THE OFFICIAL SOURCE!**
 
 ### 📌 공식 출처 (Official Source):
-- **Repository**: [appium/appium-pro](https://github.com/appium/TheApp) - The App
+- **Repository**: https://github.com/appium-pro/TheApp
 - **Original Author**: Appium Pro Team
 - **License**: MIT License
 
