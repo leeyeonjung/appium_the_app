@@ -1,11 +1,11 @@
 ## ⚠️ 중요: 공식 출처 (IMPORTANT: Official Source)
 
-> **이 저장소의 모든 코드는 공식 출처에서 복사한 것입니다!**
+> **이 저장소의 Jenkinsfile을 제외한 모든 코드는 공식 출처에서 복사한 것입니다!**
 > 
 > **ALL CODE IN THIS REPOSITORY IS COPIED FROM THE OFFICIAL SOURCE!**
 
 ### 📌 공식 출처 (Official Source):
-- **Repository**: [appium/appium-pro](https://github.com/appium/appium-pro) - The App
+- **Repository**: [appium/appium-pro](https://github.com/appium/TheApp) - The App
 - **Original Author**: Appium Pro Team
 - **License**: MIT License
 
